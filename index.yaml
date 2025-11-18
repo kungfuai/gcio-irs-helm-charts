@@ -1,0 +1,22 @@
+apiVersion: v1
+entries:
+  lander:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2025-11-18T21:58:13.769919783Z"
+    description: External document processing pipeline interface service for the AI/ML
+      processing component.
+    digest: e031e0cca911c6d3bc47133bbfd5ee21f62c779e03070a7bcdf8956c6fd7ff82
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: lander
+    sources:
+    - https://github.com/kungfuai/gcio-irs-tax-form-processor
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/lander-0.1.1/lander-0.1.1.tgz
+    version: 0.1.1
+generated: "2025-11-18T21:58:13.769926135Z"
