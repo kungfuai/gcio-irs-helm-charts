@@ -10,12 +10,12 @@ Helm's [documentation](https://helm.sh/docs) to get started.
 Once Helm has been set up correctly, add the repo as follows:
 
 ```
-$ helm repo add kfai-facture [COMING SOON!]
+$ helm repo add facture https://helm.facture.kungfu.ai
 ```
 
 If you had already added this repo earlier, run `helm repo update` to retrieve
 the latest versions of the packages.  You can then run `helm search repo
-kfai-facture` to see the charts.
+facture` to see the charts.
 
 ## Available Charts
 
