@@ -1,0 +1,70 @@
+# Default values for worker.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Name overrides: by default the name for most objects will be release-worker. It is
+# recommended to create a descriptive release name, but if you must override the names
+# separate from the release, you can set nameOverride. To remove the -worker suffix
+# set the fullnameOverride to the name you want.
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 1
+
+worker:
+  databaseURL: "postgresql://facture:supersecretpassword@postgresql:5432/facture"
+
+image:
+  repository: facture/worker
+  pullPolicy: Always                 # Specify image pull policy (Always, IfNotPresent, Never).
+  tag: ""                            # Overrides the image tag whose default is the chart appVersion.
+
+imagePullSecrets: []
+
+# Additional pod spec configuration
+pod:
+  annotations: {}
+  labels: {}
+  securityContext: {}
+
+# Additional container spec configuration
+containers:
+  securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8000
+
+# The liveness probe requires the facture service to be running.
+livenessProbe:
+  httpGet:
+    path: /livez
+    port: 8000
+    httpHeaders:
+    - name: X-Kubernetes-Probe
+      value: liveness
+  initialDelaySeconds: 2
+  periodSeconds: 10
+
+# The readiness probe requires the facture service to be running and connected to the database.
+readinessProbe:
+  httpGet:
+    path: /readyz
+    port: 8000
+    httpHeaders:
+    - name: X-Kubernetes-Probe
+      value: readiness
+  initialDelaySeconds: 2
+  periodSeconds: 10
+
+# Pod requested resources and limits.
+resources: {}
+
+# Node selector for the pods.
+nodeSelector: {}
+
+# Tolerations for the pods.
+tolerations: []
+
+# Affinity rules for the pods.
+affinity: {}
