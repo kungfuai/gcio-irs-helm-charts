@@ -11,11 +11,17 @@ fullnameOverride: ""
 
 replicaCount: 1
 
-lander:
-  databaseURL: "postgresql://facture:supersecretpassword@postgresql:5432/facture"
+lander: {}
+
+secrets:
+  create: false
+  databaseURL:
+    name: ""
+    key: "database-url"
+    value: ""
 
 image:
-  repository: facture/lander
+  repository: 595425361112.dkr.ecr.us-east-2.amazonaws.com/facture-lander
   pullPolicy: Always                 # Specify image pull policy (Always, IfNotPresent, Never).
   tag: ""                            # Overrides the image tag whose default is the chart appVersion.
 

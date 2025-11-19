@@ -49,3 +49,11 @@ Selector labels
 app.kubernetes.io/name: {{ include "extractor.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{- define "extractor.databaseURLSecretName" -}}
+{{- if .Values.secrets.create -}}
+{{ include "extractor.fullname" . }}
+{{- else -}}
+{{ default (include "extractor.fullname" .) .Values.secrets.databaseURL.secretName }}
+{{- end -}}
+{{- end -}}
