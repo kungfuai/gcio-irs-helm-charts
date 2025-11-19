@@ -5,5 +5,8 @@ are set and defined here using configuration values from the values.yaml file.
 {{- define "lander.environment" -}}
 env:
   - name: DATABASE_URL
-    value: {{ .Values.lander.databaseURL | quote }}
+    valueFrom:
+      secretKeyRef:
+        name: {{ include "lander.databaseURLSecretName" . }}
+        key: {{ .Values.secrets.databaseURL.key }}
 {{- end -}}
