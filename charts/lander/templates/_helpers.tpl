@@ -54,6 +54,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- if .Values.secrets.create -}}
 {{ include "lander.fullname" . }}
 {{- else -}}
-{{ default (include "lander.fullname" .) .Values.secrets.databaseURL.secretName }}
+{{ default (include "lander.fullname" .) .Values.secrets.databaseURL.name }}
 {{- end -}}
 {{- end -}}
