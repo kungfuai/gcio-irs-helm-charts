@@ -57,3 +57,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{ default (include "extractor.fullname" .) .Values.secrets.databaseURL.name }}
 {{- end -}}
 {{- end -}}
+
+{{- define "extractor.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+{{ .Values.serviceAccount.name | default (include "extractor.fullname" .) }}
+{{- else -}}
+default
+{{- end -}}
+{{- end -}}

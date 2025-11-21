@@ -13,6 +13,12 @@ replicaCount: 1
 
 extractor: {}
 
+# Service account for IRSA (IAM Roles for Service Accounts)
+serviceAccount:
+  create: true
+  name: ""  # If empty, uses the fullname
+  annotations: {}  # Add eks.amazonaws.com/role-arn annotation via helmfile
+
 secrets:
   create: false
   databaseURL:

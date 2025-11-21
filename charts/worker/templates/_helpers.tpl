@@ -57,3 +57,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{ default (include "worker.fullname" .) .Values.secrets.databaseURL.name }}
 {{- end -}}
 {{- end -}}
+
+{{- define "worker.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+{{ .Values.serviceAccount.name | default (include "worker.fullname" .) }}
+{{- else -}}
+default
+{{- end -}}
+{{- end -}}
