@@ -13,6 +13,19 @@ replicaCount: 1
 
 lander: {}
 
+# AWS configuration
+aws:
+  region: us-east-2
+  s3Bucket: ""  # Required - must be set per environment
+  endpointUrl: ""  # Optional - for LocalStack/testing only
+
+# Service URLs (Kubernetes DNS)
+services:
+  worker:
+    url: "http://worker.facture.svc.cluster.local:8000"
+  extractor:
+    url: "http://extractor.facture.svc.cluster.local:8000"
+
 # Service account for IRSA (IAM Roles for Service Accounts)
 serviceAccount:
   create: true
