@@ -57,3 +57,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{ default (include "lander.fullname" .) .Values.secrets.databaseURL.name }}
 {{- end -}}
 {{- end -}}
+
+{{- define "lander.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+{{ .Values.serviceAccount.name | default (include "lander.fullname" .) }}
+{{- else -}}
+default
+{{- end -}}
+{{- end -}}
