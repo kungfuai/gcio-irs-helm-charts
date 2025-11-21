@@ -13,6 +13,16 @@ replicaCount: 1
 
 extractor: {}
 
+# AWS configuration
+aws:
+  region: us-east-2
+  s3Bucket: ""  # Required - must be set per environment
+  endpointUrl: ""  # Optional - for LocalStack/testing only
+
+# API keys
+anthropic:
+  apiKey: ""  # Optional - for Claude models via Anthropic API
+
 # Service account for IRSA (IAM Roles for Service Accounts)
 serviceAccount:
   create: true
