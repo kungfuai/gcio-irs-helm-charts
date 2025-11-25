@@ -25,10 +25,6 @@ aws:
   s3Bucket: ""  # Required - must be set per environment
   endpointUrl: ""  # Optional - for LocalStack/testing only
 
-# API keys
-anthropic:
-  apiKey: ""  # Optional - for Claude models via Anthropic API
-
 # Service account for IRSA (IAM Roles for Service Accounts)
 serviceAccount:
   create: true
@@ -40,6 +36,11 @@ secrets:
   databaseURL:
     name: ""
     key: "database-url"
+    value: ""
+  anthropicAPIKey:
+    enabled: false
+    name: ""
+    key: "anthropic-api-key"
     value: ""
 
 image:
