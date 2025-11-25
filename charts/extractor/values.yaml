@@ -11,6 +11,12 @@ fullnameOverride: ""
 
 replicaCount: 1
 
+# Deployment update strategy
+# Recreate: terminates old pod before starting new one (required for GPU services on single-node clusters)
+# RollingUpdate: starts new pod before terminating old one (zero downtime but requires extra capacity)
+updateStrategy:
+  type: Recreate
+
 extractor: {}
 
 # AWS configuration
