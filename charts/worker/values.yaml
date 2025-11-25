@@ -11,7 +11,8 @@ fullnameOverride: ""
 
 replicaCount: 1
 
-worker: {}
+worker:
+  extractorConfig: /home/worker/app/extractor.json
 
 # AWS configuration
 aws:

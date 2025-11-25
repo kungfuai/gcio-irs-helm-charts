@@ -17,6 +17,8 @@ env:
   # Service URLs
   - name: EXTRACTOR_URL
     value: {{ .Values.services.extractor.url | quote }}
+  - name: EXTRACTOR_CONFIG
+    value: {{ .Values.worker.extractorConfig | quote }}
 
   # Database (from secret)
   - name: DATABASE_URL

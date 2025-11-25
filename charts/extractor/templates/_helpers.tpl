@@ -58,6 +58,15 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 {{- end -}}
 
+{{- define "extractor.anthropicAPIKeySecretName" -}}
+{{- if .Values.secrets.create -}}
+{{ include "extractor.fullname" . }}
+{{- else -}}
+{{ default (include "extractor.fullname" .) .Values.secrets.anthropicAPIKey.name }}
+{{- end -}}
+{{- end -}}
+
+
 {{- define "extractor.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
 {{ .Values.serviceAccount.name | default (include "extractor.fullname" .) }}

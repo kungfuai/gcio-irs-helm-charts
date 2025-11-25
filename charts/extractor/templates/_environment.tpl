@@ -4,7 +4,6 @@ are set and defined here using configuration values from the values.yaml file.
 */}}
 {{- define "extractor.environment" -}}
 env:
-  # AWS Configuration
   - name: AWS_DEFAULT_REGION
     value: {{ .Values.aws.region | quote }}
   - name: S3_BUCKET
@@ -13,17 +12,16 @@ env:
   - name: AWS_ENDPOINT_URL
     value: {{ .Values.aws.endpointUrl | quote }}
   {{- end }}
-
-  # API Keys
-  {{- if .Values.anthropic.apiKey }}
-  - name: ANTHROPIC_API_KEY
-    value: {{ .Values.anthropic.apiKey | quote }}
-  {{- end }}
-
-  # Database (from secret)
   - name: DATABASE_URL
     valueFrom:
       secretKeyRef:
         name: {{ include "extractor.databaseURLSecretName" . }}
         key: {{ .Values.secrets.databaseURL.key }}
+  {{- if .Values.secrets.anthropicAPIKey.enabled }}
+  - name: ANTHROPIC_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: {{ include "extractor.anthropicAPIKeySecretName" . }}
+        key: {{ .Values.secrets.anthropicAPIKey.key }}
+  {{- end }}
 {{- end -}}
