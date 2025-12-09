@@ -1,47 +1,53 @@
-name: Release Charts
+name: Release Charts to ECR
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'charts/**/*.tpl'
-      - 'charts/**/*.yaml'
-      - 'charts/**/*.txt'
+      - 'charts/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'charts/**'
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-2
+  ECR_REGISTRY: 595425361112.dkr.ecr.us-east-2.amazonaws.com
 
 jobs:
   release:
-    permissions:
-      contents: write
+    name: Push ${{ matrix.chart }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        chart: [lander, worker, extractor]
+      fail-fast: false
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          fetch-depth: 0
+          role-to-assume: arn:aws:iam::595425361112:role/ci-cd/kfai-gha-helm-charts-exp-20251209193509311300000001
+          aws-region: ${{ env.AWS_REGION }}
 
-      - name: Configure Git
-        run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Prepare GPG key
-        run: |
-          gpg_dir=.cr-gpg
-          mkdir "$gpg_dir"
-          keyring="$gpg_dir/secring.gpg"
-          base64 -d <<< "$GPG_KEYRING_BASE64" > "$keyring"
-          passphrase_file="$gpg_dir/passphrase"
-          echo "$GPG_PASSPHRASE" > "$passphrase_file"
-          echo "CR_PASSPHRASE_FILE=$passphrase_file" >> "$GITHUB_ENV"
-          echo "CR_KEYRING=$keyring" >> "$GITHUB_ENV"
-        env:
-          GPG_KEYRING_BASE64: "${{ secrets.GPG_KEYRING_BASE64 }}"
-          GPG_PASSPHRASE: "${{ secrets.GPG_PASSPHRASE }}"
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
 
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.7.0
-        with:
-          config: cr.yaml
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Package chart
+        run: helm package charts/${{ matrix.chart }}
+
+      - name: Push chart to ECR
+        if: github.event_name == 'push'
+        run: helm push ${{ matrix.chart }}-*.tgz oci://${{ env.ECR_REGISTRY }}/helm-charts
