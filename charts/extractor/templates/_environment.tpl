@@ -17,11 +17,4 @@ env:
       secretKeyRef:
         name: {{ include "extractor.databaseURLSecretName" . }}
         key: {{ .Values.secrets.databaseURL.key }}
-  {{- if .Values.secrets.anthropicAPIKey.enabled }}
-  - name: ANTHROPIC_API_KEY
-    valueFrom:
-      secretKeyRef:
-        name: {{ include "extractor.anthropicAPIKeySecretName" . }}
-        key: {{ .Values.secrets.anthropicAPIKey.key }}
-  {{- end }}
 {{- end -}}
