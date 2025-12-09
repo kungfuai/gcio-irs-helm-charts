@@ -39,6 +39,11 @@ secrets:
     key: "database-url"
     value: ""
 
+jobs:
+  migrate:
+    create: true
+    backoffLimit: 3
+
 image:
   repository: 595425361112.dkr.ecr.us-east-2.amazonaws.com/facture-lander
   pullPolicy: Always                 # Specify image pull policy (Always, IfNotPresent, Never).

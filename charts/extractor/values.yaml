@@ -37,11 +37,6 @@ secrets:
     name: ""
     key: "database-url"
     value: ""
-  anthropicAPIKey:
-    enabled: false
-    name: ""
-    key: "anthropic-api-key"
-    value: ""
 
 image:
   repository: 595425361112.dkr.ecr.us-east-2.amazonaws.com/facture-extractor

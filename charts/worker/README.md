@@ -3,8 +3,11 @@
 Create a minimal `values.yaml` file:
 
 ```yaml
-facture:
-    databaseURL: postgres://localhost:5432/facture
+aws:
+  s3Bucket: my-bucket
+secrets:
+  databaseURL:
+    value: postgres://localhost:5432/facture
 ```
 
 Update the helm repo and install the worker:
