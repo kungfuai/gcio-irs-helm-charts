@@ -12,7 +12,6 @@ metadata:
 spec:
   template:
     spec:
-      serviceAccountName: {{ include "lander.serviceAccountName" . }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
