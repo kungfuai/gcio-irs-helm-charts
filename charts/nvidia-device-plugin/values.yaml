@@ -1,0 +1,29 @@
+# NVIDIA Device Plugin DaemonSet Configuration
+
+image:
+  repository: nvcr.io/nvidia/k8s-device-plugin
+  tag: v0.16.2
+  pullPolicy: IfNotPresent
+
+# Node selector to only deploy on GPU nodes
+# Uses type=gpu to run on ALL GPU nodes (both jupyter and services)
+nodeSelector:
+  type: gpu
+
+# Toleration for GPU taints
+tolerations:
+  - key: nvidia.com/gpu
+    operator: Exists
+    effect: NoSchedule
+
+# Resource limits for the plugin pods
+resources:
+  requests:
+    cpu: 50m
+    memory: 50Mi
+  limits:
+    cpu: 100m
+    memory: 100Mi
+
+# Priority class for system-critical workload
+priorityClassName: system-node-critical

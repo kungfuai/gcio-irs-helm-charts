@@ -1,0 +1,16 @@
+# JupyterHub RBAC Configuration
+
+# Namespace where JupyterHub is deployed
+namespace: jupyter
+
+# ServiceAccount name (referenced by JupyterHub singleuser pods)
+serviceAccountName: jupyterhub-user
+
+# IAM role ARN for IRSA (passed from helmfile)
+irsaRoleArn: ""
+
+# Role permissions for notebook pods
+roleRules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "services", "persistentvolumeclaims", "events"]
+    verbs: ["get", "list", "watch", "create", "delete"]
