@@ -1,0 +1,51 @@
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: services-gpu
+spec:
+  # Template for nodes created by this pool
+  template:
+    metadata:
+      labels:
+        workload: services
+        type: gpu
+    spec:
+      # Node class to use
+      nodeClassRef:
+        group: karpenter.k8s.aws
+        kind: EC2NodeClass
+        name: default
+
+      # Taints to prevent non-GPU workloads from scheduling here
+      taints:
+        - key: nvidia.com/gpu
+          value: "true"
+          effect: NoSchedule
+
+      # Requirements for instance selection
+      requirements:
+        - key: karpenter.sh/capacity-type
+          operator: In
+          values: ["on-demand"]  # Services need on-demand reliability
+        - key: kubernetes.io/arch
+          operator: In
+          values: ["amd64"]
+        - key: karpenter.k8s.aws/instance-family
+          operator: In
+          values: ["g4dn", "g5"]  # T4 and A10G GPUs
+        - key: karpenter.k8s.aws/instance-size
+          operator: In
+          values: ["xlarge", "2xlarge"]  # Control instance size
+
+  # Limits for this pool
+  limits:
+    cpu: 32
+    memory: 128Gi
+    nvidia.com/gpu: 4  # Max 4 GPUs for services
+
+  # Disruption settings - conservative for production services
+  disruption:
+    consolidationPolicy: WhenEmpty  # Only when completely empty
+    consolidateAfter: 10m  # Wait 10 min to ensure service stability
+    budgets:
+      - nodes: "1"  # Only disrupt 1 node at a time

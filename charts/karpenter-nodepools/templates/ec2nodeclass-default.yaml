@@ -1,0 +1,54 @@
+apiVersion: karpenter.k8s.aws/v1
+kind: EC2NodeClass
+metadata:
+  name: default
+spec:
+  # Use EKS optimized AMI (includes NVIDIA drivers for GPU instances)
+  amiSelectorTerms:
+    - alias: al2023@latest
+
+  # IAM instance profile for nodes (created by Terraform)
+  instanceProfile: {{ .Values.nodeInstanceProfileName }}
+
+  # Subnets - discover using cluster name tag
+  subnetSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: {{ .Values.clusterName }}
+
+  # Security groups - use cluster security group
+  securityGroupSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: {{ .Values.clusterName }}
+
+  # User data for node initialization (AL2023 uses nodeadm, Karpenter handles cluster config automatically)
+  # Leave empty or specify custom NodeConfig settings if needed
+  # userData: |
+  #   apiVersion: node.eks.aws/v1alpha1
+  #   kind: NodeConfig
+  #   spec:
+  #     kubelet:
+  #       config:
+  #         maxPods: 110
+
+  # Tags for EC2 instances
+  tags:
+    Name: karpenter-node
+    Environment: experimental
+    ManagedBy: Karpenter
+    Project: kfai-facture
+
+  # Block device configuration
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 100Gi
+        volumeType: gp3
+        encrypted: true
+        deleteOnTermination: true
+
+  # IMDSv2 required for security
+  metadataOptions:
+    httpEndpoint: enabled
+    httpProtocolIPv6: disabled
+    httpPutResponseHopLimit: 2
+    httpTokens: required

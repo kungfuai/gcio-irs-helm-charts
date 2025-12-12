@@ -19,9 +19,15 @@ facture` to see the charts.
 
 ## Available Charts
 
-- [Lander](charts/lander/README.md)
-- [Worker](charts/worker/README.md)
-- [Extractor](charts/extractor/README.md)
+### Application Charts
+- [Lander](charts/lander/README.md) - HTTP API for document ingestion
+- [Worker](charts/worker/README.md) - Document processing pipeline orchestrator
+- [Extractor](charts/extractor/README.md) - GPU/LLM inference service
+
+### Infrastructure Charts
+- `jupyterhub-rbac` - RBAC configuration for JupyterHub notebook pods
+- `karpenter-nodepools` - Karpenter NodePool and EC2NodeClass configurations
+- `nvidia-device-plugin` - NVIDIA GPU device plugin for Kubernetes
 
 ## Debugging Templates
 

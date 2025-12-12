@@ -1,0 +1,44 @@
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: services-cpu
+spec:
+  # Template for nodes created by this pool
+  template:
+    metadata:
+      labels:
+        workload: services
+        type: cpu
+    spec:
+      # Node class to use
+      nodeClassRef:
+        group: karpenter.k8s.aws
+        kind: EC2NodeClass
+        name: default
+
+      # Requirements for instance selection
+      requirements:
+        - key: karpenter.sh/capacity-type
+          operator: In
+          values: ["on-demand"]  # Use on-demand for service reliability
+        - key: kubernetes.io/arch
+          operator: In
+          values: ["amd64"]
+        - key: karpenter.k8s.aws/instance-category
+          operator: In
+          values: ["t", "m"]  # General purpose instances
+        - key: karpenter.k8s.aws/instance-generation
+          operator: Gt
+          values: ["4"]  # Gen 5 and newer
+
+  # Limits for this pool
+  limits:
+    cpu: 50
+    memory: 100Gi
+
+  # Disruption settings
+  disruption:
+    consolidationPolicy: WhenEmptyOrUnderutilized
+    consolidateAfter: 2m  # Services can tolerate quicker consolidation
+    budgets:
+      - nodes: "10%"
