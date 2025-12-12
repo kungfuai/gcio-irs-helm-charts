@@ -181,6 +181,43 @@ entries:
     urls:
     - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/extractor-0.1.1/extractor-0.1.1.tgz
     version: 0.1.1
+  jupyterhub-rbac:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-12-12T16:21:28.842546556Z"
+    description: RBAC configuration for JupyterHub user notebooks with AWS IRSA integration.
+    digest: f7b0fbf17e38a4a33a1dbcd25fa15c43f1f33703ad2694337ee119e289362edd
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: jupyterhub-rbac
+    sources:
+    - https://github.com/kungfuai/gcio-irs-helm-charts
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/jupyterhub-rbac-0.1.0/jupyterhub-rbac-0.1.0.tgz
+    version: 0.1.0
+  karpenter-nodepools:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-12-12T16:21:29.005521314Z"
+    description: Karpenter NodePools and EC2NodeClass configuration for dynamic node
+      provisioning.
+    digest: d9141dfbd90a1e0969bf6ef1f385d5adf6de66625f7eb2847387df56a6afac1f
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: karpenter-nodepools
+    sources:
+    - https://github.com/kungfuai/gcio-irs-helm-charts
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/karpenter-nodepools-0.1.0/karpenter-nodepools-0.1.0.tgz
+    version: 0.1.0
   lander:
   - apiVersion: v2
     appVersion: 0.7.0
@@ -344,6 +381,24 @@ entries:
     urls:
     - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/lander-0.1.1/lander-0.1.1.tgz
     version: 0.1.1
+  nvidia-device-plugin:
+  - apiVersion: v2
+    appVersion: 0.16.2
+    created: "2025-12-12T16:21:29.183775283Z"
+    description: NVIDIA device plugin DaemonSet for GPU node support in Kubernetes.
+    digest: 19bab94bb96fe20ddd5d9c2e13231c0537205295855dee8b4da0428b92f28da7
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: nvidia-device-plugin
+    sources:
+    - https://github.com/kungfuai/gcio-irs-helm-charts
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/nvidia-device-plugin-0.1.0/nvidia-device-plugin-0.1.0.tgz
+    version: 0.1.0
   worker:
   - apiVersion: v2
     appVersion: 0.7.0
@@ -498,4 +553,4 @@ entries:
     urls:
     - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/worker-0.1.1/worker-0.1.1.tgz
     version: 0.1.1
-generated: "2025-12-11T20:34:29.816566135Z"
+generated: "2025-12-12T16:21:29.183836738Z"
