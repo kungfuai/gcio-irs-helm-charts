@@ -45,6 +45,9 @@ spec:
         volumeType: gp3
         encrypted: true
         deleteOnTermination: true
+        {{- if .Values.ebsKmsKeyArn }}
+        kmsKeyID: {{ .Values.ebsKmsKeyArn }}
+        {{- end }}
 
   # IMDSv2 required for security
   metadataOptions:

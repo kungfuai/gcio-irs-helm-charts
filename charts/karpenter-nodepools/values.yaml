@@ -1,0 +1,11 @@
+# Karpenter NodePools and EC2NodeClass configuration
+
+# EKS cluster name - required for discovery tags
+clusterName: ""
+
+# IAM instance profile name for Karpenter-launched nodes
+nodeInstanceProfileName: ""
+
+# KMS key ARN for EBS volume encryption (optional)
+# If not provided, uses the account's default EBS encryption key
+ebsKmsKeyArn: ""
