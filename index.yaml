@@ -238,6 +238,24 @@ entries:
   karpenter-nodepools:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-12-22T18:06:22.128160814Z"
+    description: Karpenter NodePools and EC2NodeClass configuration for dynamic node
+      provisioning.
+    digest: c4bd0a6271db0de3b6ba09cf017e03604701bbeba00d7546c3c9089f0e5e8033
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: karpenter-nodepools
+    sources:
+    - https://github.com/kungfuai/gcio-irs-helm-charts
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/karpenter-nodepools-0.2.0/karpenter-nodepools-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-12-12T16:21:29.005521314Z"
     description: Karpenter NodePools and EC2NodeClass configuration for dynamic node
       provisioning.
@@ -659,4 +677,4 @@ entries:
     urls:
     - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/worker-0.1.1/worker-0.1.1.tgz
     version: 0.1.1
-generated: "2025-12-17T20:35:29.947602415Z"
+generated: "2025-12-22T18:06:22.128223752Z"
