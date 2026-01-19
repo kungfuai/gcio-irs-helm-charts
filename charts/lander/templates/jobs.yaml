@@ -28,9 +28,7 @@ spec:
           {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: [ "/bin/sh", "-c" ]
-          args:
-            - "python -m alembic upgrade head"
+          command: ["python", "-m", "alembic", "upgrade", "head"]
           {{- include "lander.environment" . | nindent 10 }}
       restartPolicy: Never
   backoffLimit: {{ .Values.jobs.migrate.backoffLimit | default 5 }}
