@@ -1,0 +1,5 @@
+aws:
+  s3Bucket: "kfai-testing-cache"
+  sqs:
+    workerQueueURL: "kfai-testing-worker-queue-url"
+    statusQueueURL: "kfai-testing-status-queue-url"

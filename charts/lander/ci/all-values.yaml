@@ -1,0 +1,7 @@
+aws:
+  s3:
+    cacheBucket: "kfai-testing-cache"   # Required - must be set per environment
+    sourceBucket: "kfai-testing-source"  # Required - must be set per environment
+  sqs:
+    workerQueueURL: "kfai-testing-worker-queue-url"
+    statusQueueURL: "kfai-testing-status-queue-url"

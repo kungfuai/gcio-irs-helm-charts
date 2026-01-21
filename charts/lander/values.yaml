@@ -16,8 +16,13 @@ lander: {}
 # AWS configuration
 aws:
   region: us-east-2
-  s3Bucket: ""  # Required - must be set per environment
-  endpointUrl: ""  # Optional - for LocalStack/testing only
+  s3:
+    cacheBucket: ""   # Required - must be set per environment
+    sourceBucket: ""  # Required - must be set per environment
+  sqs:
+    workerQueueURL: ""
+    statusQueueURL: ""
+  endpointUrl: ""     # Optional - for LocalStack/testing only
 
 # Service URLs (Kubernetes DNS)
 services:

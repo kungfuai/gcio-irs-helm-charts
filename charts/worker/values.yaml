@@ -18,6 +18,9 @@ worker:
 aws:
   region: us-east-2
   s3Bucket: ""  # Required - must be set per environment
+  sqs:
+    workerQueueURL: ""
+    statusQueueURL: ""
   endpointUrl: ""  # Optional - for LocalStack/testing only
 
 # Service URLs (Kubernetes DNS)
