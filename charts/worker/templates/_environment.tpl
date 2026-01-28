@@ -30,4 +30,16 @@ env:
       secretKeyRef:
         name: {{ include "worker.databaseURLSecretName" . }}
         key: {{ .Values.secrets.databaseURL.key }}
+
+  # OpenTelemetry
+  - name: OTEL_SERVICE_NAME
+    value: {{ .Chart.Name | quote }}
+  - name: OTEL_EXPORTER_OTLP_ENDPOINT
+    value: {{ .Values.otel.endpoint | default "http://cloudwatch-agent.amazon-cloudwatch:4316" | quote }}
+  - name: OTEL_TRACES_EXPORTER
+    value: "otlp"
+  - name: OTEL_METRICS_EXPORTER
+    value: "none"
+  - name: OTEL_LOGS_EXPORTER
+    value: "none"
 {{- end -}}
