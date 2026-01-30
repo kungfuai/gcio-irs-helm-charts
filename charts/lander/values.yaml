@@ -74,6 +74,13 @@ service:
   type: ClusterIP
   port: 8000
 
+# Ingress configuration (disabled by default)
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+
 # The liveness probe requires the facture service to be running.
 livenessProbe:
   httpGet:
