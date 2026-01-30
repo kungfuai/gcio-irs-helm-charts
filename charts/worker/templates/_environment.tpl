@@ -23,6 +23,24 @@ env:
     value: {{ .Values.services.extractor.url | quote }}
   - name: EXTRACTOR_CONFIG
     value: {{ .Values.worker.extractorConfig | quote }}
+  {{- if .Values.worker.extractorCertPath }}
+  - name: EXTRACTOR_CERT_PATH
+    value: {{ .Values.worker.extractorCertPath | quote }}
+  {{- end }}
+
+  # Application
+  - name: LOG_LEVEL
+    value: {{ .Values.worker.logLevel | default "INFO" | quote }}
+  - name: SQS_WORKER_MAX_RETRIES
+    value: {{ .Values.worker.sqs.maxRetries | default 5 | quote }}
+  - name: SQS_WORKER_MAX_MESSAGES
+    value: {{ .Values.worker.sqs.maxMessages | default 10 | quote }}
+  - name: SQS_WORKER_MAX_QUEUE_SIZE
+    value: {{ .Values.worker.sqs.maxQueueSize | default 1024 | quote }}
+  - name: SQS_WORKER_WAIT_SECONDS
+    value: {{ .Values.worker.sqs.waitSeconds | default 20 | quote }}
+  - name: SQS_NUM_WORKERS
+    value: {{ .Values.worker.sqs.numWorkers | default 5 | quote }}
 
   # Database (from secret)
   - name: DATABASE_URL

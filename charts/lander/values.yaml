@@ -11,7 +11,9 @@ fullnameOverride: ""
 
 replicaCount: 1
 
-lander: {}
+lander:
+  logLevel: "INFO"
+  enableProcessEndpoint: false
 
 # OpenTelemetry
 otel:
@@ -32,8 +34,6 @@ aws:
 services:
   worker:
     url: "http://worker.facture.svc.cluster.local:8000"
-  extractor:
-    url: "http://extractor.facture.svc.cluster.local:8000"
 
 # Service account for IRSA (IAM Roles for Service Accounts)
 serviceAccount:
@@ -73,6 +73,13 @@ containers:
 service:
   type: ClusterIP
   port: 8000
+
+# Ingress configuration (disabled by default)
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
 
 # The liveness probe requires the facture service to be running.
 livenessProbe:

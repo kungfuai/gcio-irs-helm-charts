@@ -12,6 +12,18 @@ env:
   - name: AWS_ENDPOINT_URL
     value: {{ .Values.aws.endpointUrl | quote }}
   {{- end }}
+  # Application
+  - name: LOG_LEVEL
+    value: {{ .Values.extractor.logLevel | default "INFO" | quote }}
+  {{- if .Values.extractor.rfdetrIrsStampStage1Checkpoint }}
+  - name: RFDETR_IRS_STAMP_STAGE1_CHECKPOINT
+    value: {{ .Values.extractor.rfdetrIrsStampStage1Checkpoint | quote }}
+  {{- end }}
+  {{- if .Values.extractor.rfdetrIrsStampStage2Checkpoint }}
+  - name: RFDETR_IRS_STAMP_STAGE2_CHECKPOINT
+    value: {{ .Values.extractor.rfdetrIrsStampStage2Checkpoint | quote }}
+  {{- end }}
+
   - name: DATABASE_URL
     valueFrom:
       secretKeyRef:

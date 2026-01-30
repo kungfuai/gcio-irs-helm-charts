@@ -13,6 +13,14 @@ replicaCount: 1
 
 worker:
   extractorConfig: /app/config/extractor.json
+  extractorCertPath: ""  # Optional - TLS cert for extractor service
+  logLevel: "INFO"
+  sqs:
+    maxRetries: 5
+    maxMessages: 10
+    maxQueueSize: 1024
+    waitSeconds: 20
+    numWorkers: 5
 
 # OpenTelemetry
 otel:
