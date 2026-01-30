@@ -23,8 +23,6 @@ env:
   # Service URLs
   - name: WORKER_URL
     value: {{ .Values.services.worker.url | quote }}
-  - name: EXTRACTOR_URL
-    value: {{ .Values.services.extractor.url | quote }}
 
   # Database (from secret)
   - name: DATABASE_URL
