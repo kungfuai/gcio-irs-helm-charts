@@ -14,6 +14,10 @@ replicaCount: 1
 worker:
   extractorConfig: /app/config/extractor.json
 
+# OpenTelemetry
+otel:
+  endpoint: "http://cloudwatch-agent.amazon-cloudwatch:4316"
+
 # AWS configuration
 aws:
   region: us-east-2
