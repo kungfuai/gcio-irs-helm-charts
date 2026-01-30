@@ -11,7 +11,9 @@ fullnameOverride: ""
 
 replicaCount: 1
 
-lander: {}
+lander:
+  logLevel: "INFO"
+  enableProcessEndpoint: false
 
 # OpenTelemetry
 otel:
