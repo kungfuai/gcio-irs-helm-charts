@@ -17,7 +17,7 @@ lander:
 
 # OpenTelemetry
 otel:
-  endpoint: "http://cloudwatch-agent.amazon-cloudwatch:4316"
+  endpoint: "cloudwatch-agent.amazon-cloudwatch:4315"
 
 # AWS configuration
 aws:

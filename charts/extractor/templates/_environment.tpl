@@ -34,7 +34,9 @@ env:
   - name: OTEL_SERVICE_NAME
     value: {{ .Chart.Name | quote }}
   - name: OTEL_EXPORTER_OTLP_ENDPOINT
-    value: {{ .Values.otel.endpoint | default "http://cloudwatch-agent.amazon-cloudwatch:4316" | quote }}
+    value: {{ .Values.otel.endpoint | default "cloudwatch-agent.amazon-cloudwatch:4315" | quote }}
+  - name: OTEL_EXPORTER_OTLP_INSECURE
+    value: "true"
   - name: OTEL_TRACES_EXPORTER
     value: "otlp"
   - name: OTEL_METRICS_EXPORTER
