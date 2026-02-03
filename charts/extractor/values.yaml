@@ -22,9 +22,9 @@ extractor:
   rfdetrIrsStampStage1Checkpoint: ""  # Legacy - use MODEL_REGISTRY
   rfdetrIrsStampStage2Checkpoint: ""  # Legacy - use MODEL_REGISTRY
 
-# OpenTelemetry
+# OpenTelemetry (gRPC on port 4315, no http:// prefix)
 otel:
-  endpoint: "http://cloudwatch-agent.amazon-cloudwatch:4316"
+  endpoint: "cloudwatch-agent.amazon-cloudwatch:4315"
 
 # AWS configuration
 aws:
