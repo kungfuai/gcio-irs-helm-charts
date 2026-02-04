@@ -2,6 +2,24 @@ apiVersion: v1
 entries:
   extractor:
   - apiVersion: v2
+    appVersion: 0.15.1
+    created: "2026-02-04T21:14:30.803940184Z"
+    description: Inference service for all GPU and Bedrock based models including
+      Computer Vision models and LLMs.
+    digest: 1b66809256b5bb5ef5258c5829eca05694d48817af8d9be437383d618ece0571
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: extractor
+    sources:
+    - https://github.com/kungfuai/gcio-irs-tax-form-processor
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/extractor-0.15.1/extractor-0.15.1.tgz
+    version: 0.15.1
+  - apiVersion: v2
     appVersion: 0.15.0
     created: "2026-02-04T18:38:56.740718272Z"
     description: Inference service for all GPU and Bedrock based models including
@@ -364,6 +382,24 @@ entries:
     version: 0.1.0
   lander:
   - apiVersion: v2
+    appVersion: 0.15.1
+    created: "2026-02-04T21:14:30.943191696Z"
+    description: External document processing pipeline interface service for the AI/ML
+      processing component.
+    digest: 5155c5a961ac376d4650d02ebd2c71bc4afd684410deae63c274023cee5dd9ef
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: lander
+    sources:
+    - https://github.com/kungfuai/gcio-irs-tax-form-processor
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/lander-0.15.1/lander-0.15.1.tgz
+    version: 0.15.1
+  - apiVersion: v2
     appVersion: 0.15.0
     created: "2026-02-04T18:38:56.947428728Z"
     description: External document processing pipeline interface service for the AI/ML
@@ -689,6 +725,23 @@ entries:
     version: 0.1.0
   worker:
   - apiVersion: v2
+    appVersion: 0.15.1
+    created: "2026-02-04T21:14:31.156331239Z"
+    description: Scalable document processing worker for AI/ML information extraction.
+    digest: 531c67970d08cdd5b7fe18828a46573c63e3c86432e398a37aacd04846a072b9
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: worker
+    sources:
+    - https://github.com/kungfuai/gcio-irs-tax-form-processor
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/worker-0.15.1/worker-0.15.1.tgz
+    version: 0.15.1
+  - apiVersion: v2
     appVersion: 0.15.0
     created: "2026-02-04T18:38:57.192217131Z"
     description: Scalable document processing worker for AI/ML information extraction.
@@ -977,4 +1030,4 @@ entries:
     urls:
     - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/worker-0.1.1/worker-0.1.1.tgz
     version: 0.1.1
-generated: "2026-02-04T18:38:57.192537853Z"
+generated: "2026-02-04T21:14:31.156782865Z"
