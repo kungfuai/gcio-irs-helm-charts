@@ -24,7 +24,6 @@ aws:
   region: us-east-2
   s3:
     cacheBucket: ""   # Required - must be set per environment
-    sourceBucket: ""  # Required - must be set per environment
   sqs:
     workerQueueURL: ""
     statusQueueURL: ""
