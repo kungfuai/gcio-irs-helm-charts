@@ -1,0 +1,13 @@
+aws:
+  s3Bucket: "kfai-testing-cache"
+
+extractor:
+  logLevel: "ERROR"
+
+  models:
+    haiku: us-gov.anthropic.claude-3-haiku-20240307-v1:0
+    sonnet: us-gov.anthropic.claude-sonnet-4-5-20250929-v1:0
+    vlmClassifier: us-gov.anthropic.claude-sonnet-4-5-20250929-v1:0
+    vlmDateExtractor: us-gov.anthropic.claude-sonnet-4-5-20250929-v1:0
+    parserModel: us-gov.anthropic.claude-sonnet-4-5-20250929-v1:0
+    checkModel: us-gov.anthropic.claude-sonnet-4-5-20250929-v1:0
