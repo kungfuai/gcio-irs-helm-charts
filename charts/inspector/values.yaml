@@ -1,0 +1,43 @@
+# Default values for inspector.
+# Static SPA served by nginx — no DB, no IRSA, no secrets.
+
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 1
+
+image:
+  repository: ""
+  pullPolicy: Always
+  tag: ""
+
+imagePullSecrets: []
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: 80
+  initialDelaySeconds: 2
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /healthz
+    port: 80
+  initialDelaySeconds: 2
+  periodSeconds: 10
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

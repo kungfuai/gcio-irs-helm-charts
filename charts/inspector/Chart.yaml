@@ -1,0 +1,14 @@
+apiVersion: v2
+name: inspector
+description: Inspector SPA frontend served by nginx for document review and QA.
+type: application
+version: 0.16.0
+appVersion: "0.16.0"
+
+home: https://kungfu.ai
+icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+sources:
+  - https://github.com/kungfuai/gcio-irs-tax-form-processor
+maintainers:
+  - name: KungFu.ai
+    email: daas-support@kungfu.ai
