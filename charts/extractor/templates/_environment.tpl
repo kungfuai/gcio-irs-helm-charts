@@ -59,7 +59,7 @@ env:
   - name: OTEL_TRACES_EXPORTER
     value: "otlp"
   - name: OTEL_METRICS_EXPORTER
-    value: "none"
+    value: {{ .Values.otel.metricsExporter | default "otlp" | quote }}
   - name: OTEL_LOGS_EXPORTER
     value: "none"
 {{- end -}}

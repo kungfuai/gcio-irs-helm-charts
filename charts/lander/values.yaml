@@ -18,6 +18,7 @@ lander:
 # OpenTelemetry
 otel:
   endpoint: "cloudwatch-agent.amazon-cloudwatch:4315"
+  metricsExporter: "otlp"
 
 # AWS configuration
 aws:
