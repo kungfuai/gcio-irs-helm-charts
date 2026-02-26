@@ -16,11 +16,11 @@ worker:
   extractorCertPath: ""  # Optional - TLS cert for extractor service
   logLevel: "INFO"
   sqs:
-    maxRetries: 5
-    maxMessages: 10
-    maxQueueSize: 1024
-    waitSeconds: 20
-    numWorkers: 5
+    maxRetries: 3
+    maxMessages: 1
+    maxQueueSize: 16
+    waitSeconds: 30
+    numWorkers: 1
 
 # OpenTelemetry
 otel:
