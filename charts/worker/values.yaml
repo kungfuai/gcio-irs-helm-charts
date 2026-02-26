@@ -12,7 +12,7 @@ fullnameOverride: ""
 replicaCount: 1
 
 worker:
-  extractorConfig: /app/config/extractor.json
+  extractorConfig: /app/config/pipeline.yaml
   extractorCertPath: ""  # Optional - TLS cert for extractor service
   logLevel: "INFO"
   sqs:
