@@ -33,6 +33,7 @@ extractor:
 # OpenTelemetry (gRPC on port 4315, no http:// prefix)
 otel:
   endpoint: "cloudwatch-agent.amazon-cloudwatch:4315"
+  metricsExporter: "otlp"
 
 # AWS configuration
 aws:
