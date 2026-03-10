@@ -2,6 +2,24 @@ apiVersion: v1
 entries:
   extractor:
   - apiVersion: v2
+    appVersion: 0.19.0
+    created: "2026-03-10T15:21:48.536278596Z"
+    description: Inference service for all GPU and Bedrock based models including
+      Computer Vision models and LLMs.
+    digest: 92a7906eb0838ee9bae01ed327fab8e30965feafc6839b4ba0289bdf4f872be3
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: extractor
+    sources:
+    - https://github.com/kungfuai/gcio-irs-tax-form-processor
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/extractor-0.19.0/extractor-0.19.0.tgz
+    version: 0.19.0
+  - apiVersion: v2
     appVersion: 0.18.3
     created: "2026-02-26T21:30:12.556415585Z"
     description: Inference service for all GPU and Bedrock based models including
@@ -453,6 +471,23 @@ entries:
     version: 0.1.1
   inspector:
   - apiVersion: v2
+    appVersion: 0.19.0
+    created: "2026-03-10T15:21:48.755478485Z"
+    description: Inspector SPA frontend served by nginx for document review and QA.
+    digest: 64eb62b40cbb783bd9ff64a15e355d0dfa323da0c2b1f6d7d79c32159c6e94e0
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: inspector
+    sources:
+    - https://github.com/kungfuai/gcio-irs-tax-form-processor
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/inspector-0.19.0/inspector-0.19.0.tgz
+    version: 0.19.0
+  - apiVersion: v2
     appVersion: 0.18.3
     created: "2026-02-26T21:30:12.759422906Z"
     description: Inspector SPA frontend served by nginx for document review and QA.
@@ -593,6 +628,24 @@ entries:
     - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/karpenter-nodepools-0.1.0/karpenter-nodepools-0.1.0.tgz
     version: 0.1.0
   lander:
+  - apiVersion: v2
+    appVersion: 0.19.0
+    created: "2026-03-10T15:21:48.907413444Z"
+    description: External document processing pipeline interface service for the AI/ML
+      processing component.
+    digest: bb73badfa266b0bcb99df818804d91d748873060958a1899ef13bac793554618
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: lander
+    sources:
+    - https://github.com/kungfuai/gcio-irs-tax-form-processor
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/lander-0.19.0/lander-0.19.0.tgz
+    version: 0.19.0
   - apiVersion: v2
     appVersion: 0.18.3
     created: "2026-02-26T21:30:12.966751991Z"
@@ -1063,6 +1116,23 @@ entries:
     version: 0.1.0
   worker:
   - apiVersion: v2
+    appVersion: 0.19.0
+    created: "2026-03-10T15:21:49.068550723Z"
+    description: Scalable document processing worker for AI/ML information extraction.
+    digest: e5aec90a2138027f85f567c6095411a5c0939f3f51eba3d4d6bbbccb75655357
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: worker
+    sources:
+    - https://github.com/kungfuai/gcio-irs-tax-form-processor
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/worker-0.19.0/worker-0.19.0.tgz
+    version: 0.19.0
+  - apiVersion: v2
     appVersion: 0.18.3
     created: "2026-02-26T21:30:13.159756532Z"
     description: Scalable document processing worker for AI/ML information extraction.
@@ -1504,4 +1574,4 @@ entries:
     urls:
     - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/worker-0.1.1/worker-0.1.1.tgz
     version: 0.1.1
-generated: "2026-02-26T21:30:13.160184265Z"
+generated: "2026-03-10T15:21:49.069106623Z"
