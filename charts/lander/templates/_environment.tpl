@@ -35,17 +35,7 @@ env:
   - name: ENABLE_PROCESS_ENDPOINT
     value: {{ .Values.lander.enableProcessEndpoint | default false | quote }}
 
-  # OpenTelemetry
-  - name: OTEL_SERVICE_NAME
-    value: {{ .Chart.Name | quote }}
-  - name: OTEL_EXPORTER_OTLP_ENDPOINT
-    value: {{ .Values.otel.endpoint | default "cloudwatch-agent.amazon-cloudwatch:4315" | quote }}
-  - name: OTEL_EXPORTER_OTLP_INSECURE
-    value: "true"
-  - name: OTEL_TRACES_EXPORTER
-    value: "otlp"
-  - name: OTEL_METRICS_EXPORTER
-    value: {{ .Values.otel.metricsExporter | default "otlp" | quote }}
-  - name: OTEL_LOGS_EXPORTER
-    value: "none"
+  # OpenTelemetry — configured via Instrumentation CRD (auto-instrumentation)
+  # The ADOT operator injects OTEL env vars automatically when the pod annotation
+  # instrumentation.opentelemetry.io/inject-python: "true" is present.
 {{- end -}}

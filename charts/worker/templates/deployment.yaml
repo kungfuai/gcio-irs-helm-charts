@@ -11,10 +11,11 @@ spec:
       {{- include "worker.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.pod.annotations }}
       annotations:
+        instrumentation.opentelemetry.io/inject-python: "true"
+        {{- with .Values.pod.annotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "worker.labels" . | nindent 8 }}
         {{- with .Values.pod.labels }}
