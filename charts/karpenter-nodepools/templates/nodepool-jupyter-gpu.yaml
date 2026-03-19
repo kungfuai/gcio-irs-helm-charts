@@ -32,7 +32,7 @@ spec:
           values: ["amd64"]
         - key: karpenter.k8s.aws/instance-family
           operator: In
-          values: ["g4dn", "g5"]  # NVIDIA GPU instance families
+          values: ["g6", "g5", "g4dn"]  # L4, A10G, T4 GPUs
         - key: karpenter.k8s.aws/instance-size
           operator: In
           values: ["xlarge", "2xlarge", "4xlarge", "8xlarge", "12xlarge", "16xlarge"]  # Support multi-GPU instances
