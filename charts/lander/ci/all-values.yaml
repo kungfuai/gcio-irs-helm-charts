@@ -5,3 +5,6 @@ aws:
   sqs:
     workerQueueURL: "kfai-testing-worker-queue-url"
     statusQueueURL: "kfai-testing-status-queue-url"
+
+lander:
+  disableIntake: true
