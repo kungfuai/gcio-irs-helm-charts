@@ -3,6 +3,24 @@ entries:
   extractor:
   - apiVersion: v2
     appVersion: 0.19.5
+    created: "2026-03-19T15:29:15.233861523Z"
+    description: Inference service for all GPU and Bedrock based models including
+      Computer Vision models and LLMs.
+    digest: 20ce00f3721a4e51b9c3eca4b93ca4c06f4a4f691523c7f637511277c007724e
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: extractor
+    sources:
+    - https://github.com/kungfuai/gcio-irs-tax-form-processor
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/extractor-0.19.6/extractor-0.19.6.tgz
+    version: 0.19.6
+  - apiVersion: v2
+    appVersion: 0.19.5
     created: "2026-03-12T14:12:59.660798366Z"
     description: Inference service for all GPU and Bedrock based models including
       Computer Vision models and LLMs.
@@ -768,6 +786,24 @@ entries:
   karpenter-nodepools:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2026-03-19T15:29:15.495935683Z"
+    description: Karpenter NodePools and EC2NodeClass configuration for dynamic node
+      provisioning.
+    digest: 8135a48e0c0d2ce2c1be537f5a1fde643677781df103c42637bc4696683fc086
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: karpenter-nodepools
+    sources:
+    - https://github.com/kungfuai/gcio-irs-helm-charts
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/karpenter-nodepools-0.3.0/karpenter-nodepools-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-12-22T18:06:22.128160814Z"
     description: Karpenter NodePools and EC2NodeClass configuration for dynamic node
       provisioning.
@@ -803,6 +839,24 @@ entries:
     - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/karpenter-nodepools-0.1.0/karpenter-nodepools-0.1.0.tgz
     version: 0.1.0
   lander:
+  - apiVersion: v2
+    appVersion: 0.19.5
+    created: "2026-03-19T15:29:15.753859415Z"
+    description: External document processing pipeline interface service for the AI/ML
+      processing component.
+    digest: 92fc0474ad4f27a548edb962169a68eb5c0eed86cc4aa04f382ddcce8b58191d
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: lander
+    sources:
+    - https://github.com/kungfuai/gcio-irs-tax-form-processor
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/lander-0.19.6/lander-0.19.6.tgz
+    version: 0.19.6
   - apiVersion: v2
     appVersion: 0.19.5
     created: "2026-03-12T14:13:00.086654961Z"
@@ -1382,6 +1436,23 @@ entries:
   worker:
   - apiVersion: v2
     appVersion: 0.19.5
+    created: "2026-03-19T15:29:16.014213521Z"
+    description: Scalable document processing worker for AI/ML information extraction.
+    digest: cda9c7a8a1f78dcac9b6385998b45e81ecc77041f8296fda6eb53a9917e4e99b
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: worker
+    sources:
+    - https://github.com/kungfuai/gcio-irs-tax-form-processor
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/worker-0.19.6/worker-0.19.6.tgz
+    version: 0.19.6
+  - apiVersion: v2
+    appVersion: 0.19.5
     created: "2026-03-12T14:13:00.309425667Z"
     description: Scalable document processing worker for AI/ML information extraction.
     digest: cd1644a0a23be3372c35de0f80f1693215679533a4d990ea6ac00e8572394fbe
@@ -1924,4 +1995,4 @@ entries:
     urls:
     - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/worker-0.1.1/worker-0.1.1.tgz
     version: 0.1.1
-generated: "2026-03-12T14:13:00.310440264Z"
+generated: "2026-03-19T15:29:16.014940773Z"
