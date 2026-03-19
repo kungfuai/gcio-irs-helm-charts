@@ -7,8 +7,8 @@ spec:
   amiSelectorTerms:
     - alias: al2023@latest
 
-  # IAM instance profile for nodes (created by Terraform)
-  instanceProfile: {{ .Values.nodeInstanceProfileName }}
+  # IAM role for nodes — karpenter manages the instance profile automatically
+  role: {{ .Values.nodeRoleName }}
 
   # Subnets - discover using cluster name tag
   subnetSelectorTerms:

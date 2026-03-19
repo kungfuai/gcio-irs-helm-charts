@@ -15,11 +15,6 @@ lander:
   logLevel: "INFO"
   enableProcessEndpoint: false
 
-# OpenTelemetry
-otel:
-  endpoint: "cloudwatch-agent.amazon-cloudwatch:4315"
-  metricsExporter: "otlp"
-
 # AWS configuration
 aws:
   region: us-east-2

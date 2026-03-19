@@ -3,8 +3,8 @@
 # EKS cluster name - required for discovery tags
 clusterName: ""
 
-# IAM instance profile name for Karpenter-launched nodes
-nodeInstanceProfileName: ""
+# IAM role name for Karpenter-launched nodes (karpenter manages instance profiles)
+nodeRoleName: ""
 
 # KMS key ARN for EBS volume encryption (optional)
 # If not provided, uses the account's default EBS encryption key
