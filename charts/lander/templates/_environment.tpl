@@ -34,6 +34,10 @@ env:
     value: {{ .Values.lander.logLevel | default "INFO" | quote }}
   - name: ENABLE_PROCESS_ENDPOINT
     value: {{ .Values.lander.enableProcessEndpoint | default false | quote }}
+  {{- if .Values.lander.disableIntake }}
+  - name: DISABLE_INTAKE
+    value: "true"
+  {{- end }}
 
   # OpenTelemetry
   - name: OTEL_SERVICE_NAME
