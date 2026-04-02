@@ -9,6 +9,10 @@ env:
     value: {{ .Values.aws.region | quote }}
   - name: S3_BUCKET
     value: {{ required "aws.s3Bucket is required" .Values.aws.s3Bucket | quote }}
+  {{- if .Values.aws.s3SyntheticDataBucket }}
+  - name: S3_SYNTHETIC_DATA_BUCKET
+    value: {{ .Values.aws.s3SyntheticDataBucket | quote }}
+  {{- end }}
   - name: SQS_WORKER_QUEUE_URL
     value: {{ required "aws.sqs.workerQueueURL is required" .Values.aws.sqs.workerQueueURL | quote }}
   - name: SQS_STATUS_QUEUE_URL

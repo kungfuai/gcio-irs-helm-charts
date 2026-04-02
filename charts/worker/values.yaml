@@ -26,6 +26,7 @@ worker:
 aws:
   region: us-east-2
   s3Bucket: ""  # Required - must be set per environment
+  s3SyntheticDataBucket: ""  # Optional - synthetic/OCR output bucket
   sqs:
     workerQueueURL: ""
     statusQueueURL: ""
