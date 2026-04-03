@@ -71,27 +71,9 @@ service:
   type: ClusterIP
   port: 8000
 
-# The liveness probe requires the facture service to be running.
-livenessProbe:
-  httpGet:
-    path: /livez
-    port: 8000
-    httpHeaders:
-    - name: X-Kubernetes-Probe
-      value: liveness
-  initialDelaySeconds: 2
-  periodSeconds: 10
-
-# The readiness probe requires the facture service to be running and connected to the database.
-readinessProbe:
-  httpGet:
-    path: /readyz
-    port: 8000
-    httpHeaders:
-    - name: X-Kubernetes-Probe
-      value: readiness
-  initialDelaySeconds: 2
-  periodSeconds: 10
+# Worker is a queue consumer. It does not expose an HTTP health surface by default.
+livenessProbe: null
+readinessProbe: null
 
 # Pod requested resources and limits.
 resources: {}
