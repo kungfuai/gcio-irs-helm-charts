@@ -30,6 +30,12 @@ extractor:
     parserModel: null
     checkModel: null
 
+datePipelineArtifacts:
+  rfdetrStampDateDetectorCheckpoint: null
+  vlmStampDateReaderCheckpoint: null
+  vlmStampDateBaseModel: null
+  gem4encStampDateReaderCheckpoint: null
+
 # AWS configuration
 aws:
   region: us-east-2

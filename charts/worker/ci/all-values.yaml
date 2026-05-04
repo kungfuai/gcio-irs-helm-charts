@@ -3,3 +3,9 @@ aws:
   sqs:
     workerQueueURL: "kfai-testing-worker-queue-url"
     statusQueueURL: "kfai-testing-status-queue-url"
+
+datePipelineArtifacts:
+  rfdetrStampDateDetectorCheckpoint: s3://kfai-testing-cache/models/vlm_stamp_date_detector/base/checkpoint_best_total.pth
+  vlmStampDateReaderCheckpoint: s3://kfai-testing-cache/models/vlm_stamp_date_reader/v4/mistralai/Ministral-3-3B-Instruct-2512-BF16/checkpoint-2500
+  vlmStampDateBaseModel: s3://kfai-testing-cache/models/ministral-3-3b-instruct-2512-bf16/
+  gem4encStampDateReaderCheckpoint: s3://kfai-testing-cache/models/gem4enc_stamp_date_reader/stage2-full-280/checkpoint-5000/
