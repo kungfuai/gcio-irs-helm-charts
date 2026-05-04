@@ -49,24 +49,6 @@ env:
         name: {{ include "worker.databaseURLSecretName" . }}
         key: {{ .Values.secrets.databaseURL.key }}
 
-  # Date pipeline model artifacts
-  {{- if .Values.datePipelineArtifacts.rfdetrStampDateDetectorCheckpoint }}
-  - name: RFDETR_STAMP_DATE_DETECTOR_CHECKPOINT
-    value: {{ .Values.datePipelineArtifacts.rfdetrStampDateDetectorCheckpoint | quote }}
-  {{- end }}
-  {{- if .Values.datePipelineArtifacts.vlmStampDateReaderCheckpoint }}
-  - name: VLM_STAMP_DATE_READER_CHECKPOINT
-    value: {{ .Values.datePipelineArtifacts.vlmStampDateReaderCheckpoint | quote }}
-  {{- end }}
-  {{- if .Values.datePipelineArtifacts.vlmStampDateBaseModel }}
-  - name: VLM_STAMP_DATE_BASE_MODEL
-    value: {{ .Values.datePipelineArtifacts.vlmStampDateBaseModel | quote }}
-  {{- end }}
-  {{- if .Values.datePipelineArtifacts.gem4encStampDateReaderCheckpoint }}
-  - name: GEM4ENC_STAMP_DATE_READER_CHECKPOINT
-    value: {{ .Values.datePipelineArtifacts.gem4encStampDateReaderCheckpoint | quote }}
-  {{- end }}
-
   # OpenTelemetry — configured via Instrumentation CRD (auto-instrumentation)
   # The ADOT operator injects OTEL env vars automatically when the pod annotation
   # instrumentation.opentelemetry.io/inject-python: "true" is present.

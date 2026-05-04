@@ -22,12 +22,6 @@ worker:
     waitSeconds: 30
     numWorkers: 1
 
-datePipelineArtifacts:
-  rfdetrStampDateDetectorCheckpoint: null
-  vlmStampDateReaderCheckpoint: null
-  vlmStampDateBaseModel: null
-  gem4encStampDateReaderCheckpoint: null
-
 # AWS configuration
 aws:
   region: us-east-2
