@@ -15,6 +15,14 @@ worker:
   extractorConfig: /app/config/pipeline.yaml
   extractorCertPath: ""  # Optional - TLS cert for extractor service
   logLevel: "INFO"
+  notifier:
+    enabled: false
+    drainQueue: false
+    transcriptionURL: ""
+    acknowledgementURL: ""
+    issueURL: ""
+    timeout: 30
+    retries: 3
   sqs:
     maxRetries: 3
     maxMessages: 1
@@ -48,6 +56,9 @@ secrets:
     name: ""
     key: "database-url"
     value: ""
+  notifierApiKey:
+    name: ""
+    key: "notifier-api-key"
 
 image:
   repository: 595425361112.dkr.ecr.us-east-2.amazonaws.com/facture-worker

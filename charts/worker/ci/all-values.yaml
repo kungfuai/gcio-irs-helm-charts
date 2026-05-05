@@ -3,3 +3,10 @@ aws:
   sqs:
     workerQueueURL: "kfai-testing-worker-queue-url"
     statusQueueURL: "kfai-testing-status-queue-url"
+worker:
+  notifier:
+    enabled: true
+    transcriptionURL: "https://example.test/integrations/kungfu-ai/tasks/transcription"
+secrets:
+  notifierApiKey:
+    name: "kfai-testing-notifier"
