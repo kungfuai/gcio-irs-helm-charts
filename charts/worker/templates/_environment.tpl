@@ -8,8 +8,11 @@ are set and defined here using configuration values from the values.yaml file.
 {{- if and $notifier.enabled (eq $notifierURLCount 0) -}}
 {{- fail "worker.notifier.enabled requires at least one notifier URL" -}}
 {{- end -}}
-{{- if and $notifier.enabled (not .Values.secrets.notifierApiKey.name) -}}
-{{- fail "worker.notifier.enabled requires secrets.notifierApiKey.name" -}}
+{{- if and $notifier.enabled (not $notifier.clientID) -}}
+{{- fail "worker.notifier.enabled requires worker.notifier.clientID" -}}
+{{- end -}}
+{{- if and $notifier.enabled (not .Values.secrets.notifierClientSecret.name) -}}
+{{- fail "worker.notifier.enabled requires secrets.notifierClientSecret.name" -}}
 {{- end -}}
 env:
   # AWS Configuration
@@ -59,6 +62,10 @@ env:
     value: {{ $notifier.timeout | default 30 | quote }}
   - name: NOTIFIER_RETRIES
     value: {{ $notifier.retries | default 3 | quote }}
+  {{- if $notifier.clientID }}
+  - name: NOTIFIER_CLIENT_ID
+    value: {{ $notifier.clientID | quote }}
+  {{- end }}
   {{- if $notifier.transcriptionURL }}
   - name: NOTIFIER_TRANSCRIPTION_URL
     value: {{ $notifier.transcriptionURL | quote }}
@@ -71,12 +78,12 @@ env:
   - name: NOTIFIER_ISSUE_URL
     value: {{ $notifier.issueURL | quote }}
   {{- end }}
-  {{- if .Values.secrets.notifierApiKey.name }}
-  - name: NOTIFIER_API_KEY
+  {{- if .Values.secrets.notifierClientSecret.name }}
+  - name: NOTIFIER_CLIENT_SECRET
     valueFrom:
       secretKeyRef:
-        name: {{ .Values.secrets.notifierApiKey.name | quote }}
-        key: {{ .Values.secrets.notifierApiKey.key | quote }}
+        name: {{ .Values.secrets.notifierClientSecret.name | quote }}
+        key: {{ .Values.secrets.notifierClientSecret.key | quote }}
   {{- end }}
 
   # Database (from secret)
