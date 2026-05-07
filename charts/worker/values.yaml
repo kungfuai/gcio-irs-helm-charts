@@ -18,6 +18,7 @@ worker:
   notifier:
     enabled: false
     drainQueue: false
+    clientID: ""
     transcriptionURL: ""
     acknowledgementURL: ""
     issueURL: ""
@@ -56,9 +57,10 @@ secrets:
     name: ""
     key: "database-url"
     value: ""
-  notifierApiKey:
+  notifierClientSecret:
     name: ""
-    key: "notifier-api-key"
+    # Backing Kubernetes Secret data key created by operations.
+    key: "NOTIFIER_CLIENT_SECRET"
 
 image:
   repository: 595425361112.dkr.ecr.us-east-2.amazonaws.com/facture-worker

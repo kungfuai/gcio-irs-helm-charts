@@ -6,7 +6,8 @@ aws:
 worker:
   notifier:
     enabled: true
-    transcriptionURL: "https://example.test/integrations/kungfu-ai/tasks/transcription"
+    clientID: "kfai-testing-client-id"
+    transcriptionURL: "https://example.test/integrations/kungfu-ai/task/transcription"
 secrets:
-  notifierApiKey:
+  notifierClientSecret:
     name: "kfai-testing-notifier"
