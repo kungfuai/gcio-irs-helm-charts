@@ -23,6 +23,7 @@ facture` to see the charts.
 - [Lander](charts/lander/README.md) - HTTP API for document ingestion
 - [Worker](charts/worker/README.md) - Document processing pipeline orchestrator
 - [Extractor](charts/extractor/README.md) - GPU/LLM inference service
+- [Ospere](charts/ospere/README.md) - Django service for IRS MeF filing orchestration
 
 ### Infrastructure Charts
 - `jupyterhub-rbac` - RBAC configuration for JupyterHub notebook pods

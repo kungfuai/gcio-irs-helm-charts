@@ -1,0 +1,140 @@
+# Default values for ospere.
+
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 1
+
+ospere:
+  logLevel: "INFO"
+  djangoSettingsModule: "ospere.settings.prod"
+  debug: false
+  allowedHosts: ""
+  csrfTrustedOrigins: ""
+  storageBackend: "s3"
+  localStorageRoot: "/app/storage/artifacts"
+  awsQuerystringExpire: 3600
+  mef:
+    environment: "ats"
+    clientSystemID: ""
+    efin: ""
+    etin: ""
+    softwareID: ""
+    endpointURL: ""
+    msiWSDL: "wsdl/MeFMSIServices.wsdl"
+    transmitterWSDL: "wsdl/MeFTransmitterServicesMTOM.wsdl"
+    cert:
+      secretName: ""
+      mountPath: "/var/run/ospere/mef"
+      certKey: "cert.pem"
+      privateKeyKey: "key.pem"
+
+web:
+  command: []
+  args: []
+
+worker:
+  enabled: false
+  replicaCount: 1
+  command: ["celery"]
+  args: ["-A", "ospere", "worker", "--loglevel=INFO"]
+  resources: {}
+
+beat:
+  enabled: false
+  replicaCount: 1
+  command: ["celery"]
+  args: ["-A", "ospere", "beat", "--loglevel=INFO"]
+  resources: {}
+
+aws:
+  region: us-east-2
+  s3:
+    artifactsBucket: ""
+    schemasBucket: ""
+  endpointUrl: ""
+
+database:
+  name: "ospere"
+  user: "postgres"
+  host: ""
+  port: "5432"
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+
+secrets:
+  create: false
+  djangoSecretKey:
+    name: ""
+    key: "django-secret-key"
+    value: ""
+  postgresPassword:
+    name: ""
+    key: "postgres-password"
+    value: ""
+  celeryBrokerURL:
+    name: ""
+    key: "celery-broker-url"
+    value: ""
+  celeryResultBackend:
+    name: ""
+    key: "celery-result-backend"
+    value: ""
+
+jobs:
+  migrate:
+    create: true
+    backoffLimit: 3
+
+image:
+  repository: 595425361112.dkr.ecr.us-east-2.amazonaws.com/ospere
+  pullPolicy: Always
+  tag: ""
+
+imagePullSecrets: []
+
+pod:
+  annotations: {}
+  labels: {}
+  securityContext: {}
+
+containers:
+  securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+
+livenessProbe:
+  httpGet:
+    path: /livez
+    port: 8000
+    httpHeaders:
+    - name: X-Kubernetes-Probe
+      value: liveness
+  initialDelaySeconds: 2
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /readyz
+    port: 8000
+    httpHeaders:
+    - name: X-Kubernetes-Probe
+      value: readiness
+  initialDelaySeconds: 2
+  periodSeconds: 10
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

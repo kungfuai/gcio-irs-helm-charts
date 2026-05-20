@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "ospere.fullname" . }}-test-connection"
+  labels:
+    {{- include "ospere.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ["wget"]
+      args: ["{{ include "ospere.fullname" . }}:{{ .Values.service.port }}/livez"]
+  restartPolicy: Never
