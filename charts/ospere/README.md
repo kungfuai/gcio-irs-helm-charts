@@ -1,0 +1,26 @@
+# Ospere Helm Chart
+
+Deploys the Ospere Django service for IRS MeF filing orchestration.
+
+The chart follows the same service pattern as the existing Facture charts:
+
+- Django/Gunicorn web deployment
+- optional Django migration hook job
+- service account with IRSA annotations
+- database and application secrets by reference
+- optional ingress
+- optional Celery worker and beat deployments that use the same image
+
+Celery workloads are disabled by default until the filing lifecycle moves to asynchronous jobs.
+
+Environment wiring should provide the public host through chart values. The expected
+GovCIO host pattern is:
+
+- sandbox/dev: `ospere.<dev-domain>`
+- test: `ospere.<test-domain>`
+- production: `ospere.<prod-domain>`
+
+For the current Facture-style domains that means infra can set hosts such as
+`ospere.facture.dev.govciocentralplatform.com`,
+`ospere.facture.test.govciocentralplatform.com`, and
+`ospere.facture.govciocentralplatform.com`.

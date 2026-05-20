@@ -1,0 +1,42 @@
+ospere:
+  allowedHosts: "ospere.example.com"
+  csrfTrustedOrigins: "https://ospere.example.com"
+  mef:
+    environment: "ats"
+    clientSystemID: "client-system"
+    etin: "12345"
+    endpointURL: "https://example.com/mef"
+    cert:
+      secretName: "ospere-mef-cert"
+
+aws:
+  s3:
+    artifactsBucket: "ospere-artifacts"
+    schemasBucket: "ospere-schemas"
+
+database:
+  host: "postgres.example.com"
+
+secrets:
+  create: true
+  djangoSecretKey:
+    value: "ci-secret-key"
+  postgresPassword:
+    value: "password"
+  celeryBrokerURL:
+    value: "redis://redis:6379/0"
+  celeryResultBackend:
+    value: "django-db"
+
+worker:
+  enabled: true
+
+beat:
+  enabled: true
+
+ingress:
+  enabled: true
+  hosts:
+    - host: ospere.example.com
+      paths:
+        - path: /

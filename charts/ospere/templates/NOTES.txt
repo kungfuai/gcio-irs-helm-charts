@@ -1,0 +1,8 @@
+Ospere has been deployed.
+
+Service:
+  {{ include "ospere.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.service.port }}
+
+Probes:
+  Liveness:  /livez
+  Readiness: /readyz

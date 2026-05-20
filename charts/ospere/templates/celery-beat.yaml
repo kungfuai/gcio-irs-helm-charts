@@ -1,0 +1,79 @@
+{{- if .Values.beat.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ospere.fullname" . }}-beat
+  labels:
+    {{- include "ospere.labels" . | nindent 4 }}
+    app.kubernetes.io/component: beat
+spec:
+  replicas: {{ .Values.beat.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "ospere.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: beat
+  template:
+    metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-python: "true"
+        {{- with .Values.pod.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "ospere.labels" . | nindent 8 }}
+        app.kubernetes.io/component: beat
+        {{- with .Values.pod.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "ospere.serviceAccountName" . }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.pod.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}-beat
+          image: "{{ include "ospere.image" . }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.containers.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          command:
+            {{- toYaml .Values.beat.command | nindent 12 }}
+          args:
+            {{- toYaml .Values.beat.args | nindent 12 }}
+          {{- include "ospere.environment" . | nindent 10 }}
+          {{- with .Values.beat.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- if .Values.ospere.mef.cert.secretName }}
+          volumeMounts:
+            - name: mef-cert
+              mountPath: {{ .Values.ospere.mef.cert.mountPath | quote }}
+              readOnly: true
+          {{- end }}
+      {{- if .Values.ospere.mef.cert.secretName }}
+      volumes:
+        - name: mef-cert
+          secret:
+            secretName: {{ .Values.ospere.mef.cert.secretName | quote }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
