@@ -2,11 +2,12 @@
 Ospere pods are configured primarily through environment variables.
 */}}
 {{- define "ospere.environment" -}}
-{{- if and .Values.worker.enabled (not (or .Values.secrets.celeryBrokerURL.name .Values.secrets.celeryBrokerURL.value)) -}}
-{{- fail "worker.enabled requires secrets.celeryBrokerURL.name or secrets.celeryBrokerURL.value" -}}
+{{- $celeryBrokerConfigured := or (and .Values.secrets.create .Values.secrets.celeryBrokerURL.value) (and (not .Values.secrets.create) .Values.secrets.celeryBrokerURL.name) -}}
+{{- if and .Values.worker.enabled (not $celeryBrokerConfigured) -}}
+{{- fail "worker.enabled requires secrets.celeryBrokerURL.value when secrets.create is true, or secrets.celeryBrokerURL.name when secrets.create is false" -}}
 {{- end -}}
-{{- if and .Values.beat.enabled (not (or .Values.secrets.celeryBrokerURL.name .Values.secrets.celeryBrokerURL.value)) -}}
-{{- fail "beat.enabled requires secrets.celeryBrokerURL.name or secrets.celeryBrokerURL.value" -}}
+{{- if and .Values.beat.enabled (not $celeryBrokerConfigured) -}}
+{{- fail "beat.enabled requires secrets.celeryBrokerURL.value when secrets.create is true, or secrets.celeryBrokerURL.name when secrets.create is false" -}}
 {{- end -}}
 env:
   # Django
@@ -96,14 +97,14 @@ env:
   {{- end }}
 
   # Celery
-  {{- if or .Values.secrets.celeryBrokerURL.name .Values.secrets.celeryBrokerURL.value }}
+  {{- if $celeryBrokerConfigured }}
   - name: CELERY_BROKER_URL
     valueFrom:
       secretKeyRef:
         name: {{ include "ospere.celeryBrokerURLSecretName" . }}
         key: {{ .Values.secrets.celeryBrokerURL.key | quote }}
   {{- end }}
-  {{- if or .Values.secrets.celeryResultBackend.name .Values.secrets.celeryResultBackend.value }}
+  {{- if or (and .Values.secrets.create .Values.secrets.celeryResultBackend.value) (and (not .Values.secrets.create) .Values.secrets.celeryResultBackend.name) }}
   - name: CELERY_RESULT_BACKEND
     valueFrom:
       secretKeyRef:
