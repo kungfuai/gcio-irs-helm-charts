@@ -1504,6 +1504,25 @@ entries:
     urls:
     - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/nvidia-device-plugin-0.1.0/nvidia-device-plugin-0.1.0.tgz
     version: 0.1.0
+  ospere:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2026-05-20T17:50:57.668822124Z"
+    description: Django service for IRS MeF filing orchestration, schema validation,
+      and filing lifecycle state.
+    digest: 3ea1e0dee3fbd90a7930050d744260e18c794841beb69461579b3f7d13b1dd18
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: ospere
+    sources:
+    - https://github.com/kungfuai/gcio-irs-mef-service
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/ospere-0.1.0/ospere-0.1.0.tgz
+    version: 0.1.0
   worker:
   - apiVersion: v2
     appVersion: 0.20.0-rc.6
@@ -2134,4 +2153,4 @@ entries:
     urls:
     - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/worker-0.1.1/worker-0.1.1.tgz
     version: 0.1.1
-generated: "2026-05-07T18:59:47.914781615Z"
+generated: "2026-05-20T17:50:57.669062216Z"
