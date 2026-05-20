@@ -17,7 +17,9 @@ ospere:
   mef:
     environment: "ats"
     clientSystemID: ""
+    efin: ""
     etin: ""
+    softwareID: ""
     endpointURL: ""
     msiWSDL: "wsdl/MeFMSIServices.wsdl"
     transmitterWSDL: "wsdl/MeFTransmitterServicesMTOM.wsdl"

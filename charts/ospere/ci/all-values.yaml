@@ -4,7 +4,9 @@ ospere:
   mef:
     environment: "ats"
     clientSystemID: "client-system"
+    efin: "123456"
     etin: "12345"
+    softwareID: "11122233"
     endpointURL: "https://example.com/mef"
     cert:
       secretName: "ospere-mef-cert"

@@ -13,6 +13,12 @@ The chart follows the same service pattern as the existing Facture charts:
 
 Celery workloads are disabled by default until the filing lifecycle moves to asynchronous jobs.
 
+MeF A2A configuration requires more than the mounted certificate. The chart exposes
+the X.509 cert path, private key path, `AppSysID` (`MEF_CLIENT_SYSTEM_ID`), EFIN,
+ETIN, software ID, endpoint, environment, and WSDL paths. The application must also
+read any exposed env vars; at chart introduction time Ospere still needs app-side
+support for `MEF_SOFTWARE_ID`.
+
 Environment wiring should provide the public host through chart values. The expected
 GovCIO host pattern is:
 

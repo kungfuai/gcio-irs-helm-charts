@@ -68,9 +68,17 @@ env:
   - name: MEF_CLIENT_SYSTEM_ID
     value: {{ .Values.ospere.mef.clientSystemID | quote }}
   {{- end }}
+  {{- if .Values.ospere.mef.efin }}
+  - name: MEF_EFIN
+    value: {{ .Values.ospere.mef.efin | quote }}
+  {{- end }}
   {{- if .Values.ospere.mef.etin }}
   - name: MEF_ETIN
     value: {{ .Values.ospere.mef.etin | quote }}
+  {{- end }}
+  {{- if .Values.ospere.mef.softwareID }}
+  - name: MEF_SOFTWARE_ID
+    value: {{ .Values.ospere.mef.softwareID | quote }}
   {{- end }}
   {{- if .Values.ospere.mef.endpointURL }}
   - name: MEF_ENDPOINT_URL
