@@ -7,8 +7,8 @@ replicaCount: 1
 
 ospere:
   logLevel: "INFO"
-  # Runtime environment label for structured logs. If unset, the chart uses the
-  # release namespace.
+  # Runtime environment label for structured logs. If empty or unset, the chart
+  # uses the release namespace.
   runtimeEnvironment: ""
   djangoSettingsModule: "ospere.settings.prod"
   debug: false
