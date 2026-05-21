@@ -36,6 +36,8 @@ spec:
           {{- end }}
           command: ["python", "manage.py", "migrate", "--noinput"]
           {{- include "ospere.environment" . | nindent 10 }}
+            - name: OSPERE_SERVICE_COMPONENT
+              value: "job.migrate"
           {{- if .Values.ospere.mef.cert.secretName }}
           volumeMounts:
             - name: mef-cert

@@ -48,6 +48,8 @@ spec:
           args:
             {{- toYaml .Values.beat.args | nindent 12 }}
           {{- include "ospere.environment" . | nindent 10 }}
+            - name: OSPERE_SERVICE_COMPONENT
+              value: "celery.beat"
           {{- with .Values.beat.resources }}
           resources:
             {{- toYaml . | nindent 12 }}

@@ -113,6 +113,8 @@ env:
   {{- end }}
 
   # Application
+  - name: OSPERE_ENVIRONMENT
+    value: {{ .Values.ospere.runtimeEnvironment | default .Release.Namespace | quote }}
   - name: LOG_LEVEL
     value: {{ .Values.ospere.logLevel | default "INFO" | quote }}
 

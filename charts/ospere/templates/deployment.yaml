@@ -55,6 +55,8 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           {{- include "ospere.environment" . | nindent 10 }}
+            - name: OSPERE_SERVICE_COMPONENT
+              value: "web"
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
