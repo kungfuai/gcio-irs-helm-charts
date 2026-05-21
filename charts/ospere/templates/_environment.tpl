@@ -113,10 +113,20 @@ env:
   {{- end }}
 
   # Application
+  - name: OSPERE_ENVIRONMENT
+    value: {{ .Values.ospere.runtimeEnvironment | default .Release.Namespace | quote }}
   - name: LOG_LEVEL
     value: {{ .Values.ospere.logLevel | default "INFO" | quote }}
 
   # OpenTelemetry — configured via Instrumentation CRD (auto-instrumentation)
   # The ADOT operator injects OTEL env vars automatically when the pod annotation
   # instrumentation.opentelemetry.io/inject-python: "true" is present.
+{{- end -}}
+
+{{/*
+Structured logging component label for a specific Ospere workload.
+*/}}
+{{- define "ospere.serviceComponentEnv" -}}
+- name: OSPERE_SERVICE_COMPONENT
+  value: {{ .component | quote }}
 {{- end -}}

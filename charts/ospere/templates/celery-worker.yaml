@@ -48,6 +48,7 @@ spec:
           args:
             {{- toYaml .Values.worker.args | nindent 12 }}
           {{- include "ospere.environment" . | nindent 10 }}
+            {{- include "ospere.serviceComponentEnv" (dict "component" "celery.worker") | nindent 12 }}
           {{- with .Values.worker.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
