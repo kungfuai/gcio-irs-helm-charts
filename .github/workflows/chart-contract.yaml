@@ -53,12 +53,14 @@ jobs:
           raise "worker deployment still emits readinessProbe" if container.key?("readinessProbe")
           RUBY
 
-      - name: Validate Ospere migration hook service account contract
+      - name: Validate Ospere hook contract
         run: |
           rendered="$(mktemp)"
           helm template ospere ./charts/ospere \
             --namespace ospere \
             -f ./charts/ospere/ci/all-values.yaml \
+            --set jobs.ensureAdmin.create=true \
+            --set jobs.ensureAdmin.existingSecret=ospere-admin-bootstrap \
             >"${rendered}"
 
           ruby - "${rendered}" <<'RUBY'
@@ -72,12 +74,34 @@ jobs:
 
           raise "ospere migration job missing from rendered chart" if migration.nil?
 
+          migration_annotations = migration.dig("metadata", "annotations") || {}
+          raise "ospere migration hook must run before install and upgrade" unless migration_annotations["helm.sh/hook"] == "pre-install,pre-upgrade"
+          raise "ospere migration hook weight must be 8" unless migration_annotations["helm.sh/hook-weight"] == "8"
+
           pod_spec = migration.dig("spec", "template", "spec")
           raise "ospere migration pod spec missing from rendered chart" if pod_spec.nil?
 
           if pod_spec.key?("serviceAccountName")
             raise "ospere pre-install migration hook must not reference chart-created serviceAccountName by default"
           end
+
+          migration_container = pod_spec.dig("containers", 0)
+          raise "ospere migration container missing from rendered chart" if migration_container.nil?
+          raise "ospere migration hook must use lockedmigrate" unless migration_container["command"] == ["python", "manage.py", "lockedmigrate", "--noinput"]
+
+          ensure_admin = docs.find do |doc|
+            doc.is_a?(Hash) && doc["kind"] == "Job" && doc.dig("metadata", "name") == "ospere-ensure-admin"
+          end
+
+          raise "ospere ensure-admin job missing from rendered chart" if ensure_admin.nil?
+
+          ensure_admin_annotations = ensure_admin.dig("metadata", "annotations") || {}
+          raise "ospere ensure-admin hook must run before install and upgrade" unless ensure_admin_annotations["helm.sh/hook"] == "pre-install,pre-upgrade"
+          raise "ospere ensure-admin hook must run after migrations" unless ensure_admin_annotations["helm.sh/hook-weight"] == "16"
+
+          ensure_admin_container = ensure_admin.dig("spec", "template", "spec", "containers", 0)
+          raise "ospere ensure-admin container missing from rendered chart" if ensure_admin_container.nil?
+          raise "ospere ensure-admin hook must use ensureadmin" unless ensure_admin_container["command"] == ["python", "manage.py", "ensureadmin"]
 
           service_account = docs.find do |doc|
             doc.is_a?(Hash) && doc["kind"] == "ServiceAccount" && doc.dig("metadata", "name") == "ospere"

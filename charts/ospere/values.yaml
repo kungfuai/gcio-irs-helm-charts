@@ -94,6 +94,17 @@ jobs:
     # Pre-install/pre-upgrade migration hooks run before normal chart resources.
     # Leave empty so first installs can use the namespace default ServiceAccount.
     serviceAccountName: ""
+  ensureAdmin:
+    create: false
+    backoffLimit: 3
+    # Pre-install/pre-upgrade admin hooks run after locked migrations.
+    # Leave empty so first installs can use the namespace default ServiceAccount.
+    serviceAccountName: ""
+    # Existing short-lived Secret created by the deployment workflow.
+    existingSecret: ""
+    usernameKey: "username"
+    emailKey: "email"
+    passwordKey: "password"
 
 image:
   repository: 595425361112.dkr.ecr.us-east-2.amazonaws.com/ospere
