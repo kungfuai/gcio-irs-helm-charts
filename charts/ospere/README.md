@@ -42,6 +42,6 @@ GovCIO host pattern is:
 - production: `ospere.<prod-domain>`
 
 For the current Facture-style domains that means infra can set hosts such as
-`ospere.dev.govciocentralplatform.com`,
-`ospere.test.govciocentralplatform.com`, and
-`ospere.govciocentralplatform.com`.
+`ospere.facture.dev.govciocentralplatform.com`,
+`ospere.facture.test.govciocentralplatform.com`, and
+`ospere.facture.govciocentralplatform.com`.
