@@ -108,7 +108,7 @@ jobs:
 
           ensure_admin_container = ensure_admin_pod_spec.dig("containers", 0)
           raise "ospere ensure-admin container missing from rendered chart" if ensure_admin_container.nil?
-          raise "ospere ensure-admin hook must use ensureadmin" unless ensure_admin_container["command"] == ["python", "manage.py", "ensureadmin"]
+          raise "ospere ensure-admin hook must use syncadmin" unless ensure_admin_container["command"] == ["python", "manage.py", "syncadmin"]
 
           admin_env = ensure_admin_container["env"] || []
           admin_secret_refs = admin_env.each_with_object({}) do |env_var, refs|
