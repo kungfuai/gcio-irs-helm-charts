@@ -2,7 +2,7 @@ apiVersion: v2
 name: ospere
 description: Django service for IRS MeF filing orchestration, schema validation, and filing lifecycle state.
 type: application
-version: 0.1.2
+version: 0.1.3
 appVersion: "0.1.0"
 home: https://kungfu.ai
 icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png

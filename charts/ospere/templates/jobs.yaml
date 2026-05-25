@@ -36,7 +36,7 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          command: ["python", "manage.py", "migrate", "--noinput"]
+          command: ["python", "manage.py", "lockedmigrate", "--noinput"]
           {{- include "ospere.environment" . | nindent 10 }}
             {{- include "ospere.serviceComponentEnv" (dict "component" "job.migrate") | nindent 12 }}
           {{- if .Values.ospere.mef.cert.secretName }}
@@ -53,4 +53,78 @@ spec:
       {{- end }}
       restartPolicy: Never
   backoffLimit: {{ .Values.jobs.migrate.backoffLimit | default 5 }}
+{{- end }}
+{{- if and .Values.jobs.migrate.create .Values.jobs.ensureAdmin.create }}
+---
+{{- end }}
+{{- if .Values.jobs.ensureAdmin.create }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "ospere.fullname" . }}-ensure-admin
+  labels:
+    {{- include "ospere.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ensure-admin
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "16"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  template:
+    metadata:
+      labels:
+        {{- include "ospere.labels" . | nindent 8 }}
+        app.kubernetes.io/component: ensure-admin
+    spec:
+      {{- if .Values.jobs.ensureAdmin.serviceAccountName }}
+      serviceAccountName: {{ .Values.jobs.ensureAdmin.serviceAccountName | quote }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.pod.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}-ensure-admin
+          image: "{{ include "ospere.image" . }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.containers.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          command: ["python", "manage.py", "ensureadmin"]
+          {{- include "ospere.environment" . | nindent 10 }}
+            {{- include "ospere.serviceComponentEnv" (dict "component" "job.ensure-admin") | nindent 12 }}
+            - name: DJANGO_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "jobs.ensureAdmin.existingSecret is required when jobs.ensureAdmin.create is true" .Values.jobs.ensureAdmin.existingSecret | quote }}
+                  key: {{ .Values.jobs.ensureAdmin.usernameKey | quote }}
+            - name: DJANGO_ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "jobs.ensureAdmin.existingSecret is required when jobs.ensureAdmin.create is true" .Values.jobs.ensureAdmin.existingSecret | quote }}
+                  key: {{ .Values.jobs.ensureAdmin.emailKey | quote }}
+            - name: DJANGO_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "jobs.ensureAdmin.existingSecret is required when jobs.ensureAdmin.create is true" .Values.jobs.ensureAdmin.existingSecret | quote }}
+                  key: {{ .Values.jobs.ensureAdmin.passwordKey | quote }}
+          {{- if .Values.ospere.mef.cert.secretName }}
+          volumeMounts:
+            - name: mef-cert
+              mountPath: {{ .Values.ospere.mef.cert.mountPath | quote }}
+              readOnly: true
+          {{- end }}
+      {{- if .Values.ospere.mef.cert.secretName }}
+      volumes:
+        - name: mef-cert
+          secret:
+            secretName: {{ .Values.ospere.mef.cert.secretName | quote }}
+      {{- end }}
+      restartPolicy: Never
+  backoffLimit: {{ .Values.jobs.ensureAdmin.backoffLimit | default 5 }}
 {{- end -}}
