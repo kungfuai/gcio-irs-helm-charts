@@ -1507,6 +1507,24 @@ entries:
   ospere:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2026-05-25T18:44:55.140254162Z"
+    description: Django service for IRS MeF filing orchestration, schema validation,
+      and filing lifecycle state.
+    digest: 7e8c7e4c2da73697b951882725e887791508a5e06a6f96127e7ec27d9abaecb0
+    home: https://kungfu.ai
+    icon: https://cdn.prod.website-files.com/626ff088dc91e832fe2f3249/680e74ec5378b7b440b03b0c_32x32.png
+    maintainers:
+    - email: daas-support@kungfu.ai
+      name: KungFu.ai
+    name: ospere
+    sources:
+    - https://github.com/kungfuai/gcio-irs-mef-service
+    type: application
+    urls:
+    - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/ospere-0.1.3/ospere-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2026-05-25T17:08:50.367543676Z"
     description: Django service for IRS MeF filing orchestration, schema validation,
       and filing lifecycle state.
@@ -2189,4 +2207,4 @@ entries:
     urls:
     - https://github.com/kungfuai/gcio-irs-helm-charts/releases/download/worker-0.1.1/worker-0.1.1.tgz
     version: 0.1.1
-generated: "2026-05-25T17:08:50.367709465Z"
+generated: "2026-05-25T18:44:55.140572284Z"
