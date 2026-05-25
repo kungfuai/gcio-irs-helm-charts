@@ -13,6 +13,11 @@ The chart follows the same service pattern as the existing Facture charts:
 
 Celery workloads are disabled by default until the filing lifecycle moves to asynchronous jobs.
 
+The migration hook intentionally uses the namespace default ServiceAccount unless
+`jobs.migrate.serviceAccountName` is explicitly set. Pre-install hooks run before
+normal chart resources, so referencing the chart-created Ospere ServiceAccount
+would break first installs.
+
 MeF A2A configuration requires more than the mounted certificate. The chart exposes
 the X.509 cert path, private key path, `AppSysID` (`MEF_CLIENT_SYSTEM_ID`), EFIN,
 ETIN, software ID, endpoint, environment, and WSDL paths. The application must also
