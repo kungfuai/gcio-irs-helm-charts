@@ -91,6 +91,9 @@ jobs:
   migrate:
     create: true
     backoffLimit: 3
+    # Pre-install/pre-upgrade migration hooks run before normal chart resources.
+    # Leave empty so first installs can use the namespace default ServiceAccount.
+    serviceAccountName: ""
 
 image:
   repository: 595425361112.dkr.ecr.us-east-2.amazonaws.com/ospere

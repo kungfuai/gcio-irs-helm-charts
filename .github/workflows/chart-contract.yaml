@@ -52,3 +52,36 @@ jobs:
           raise "worker deployment still emits livenessProbe" if container.key?("livenessProbe")
           raise "worker deployment still emits readinessProbe" if container.key?("readinessProbe")
           RUBY
+
+      - name: Validate Ospere migration hook service account contract
+        run: |
+          rendered="$(mktemp)"
+          helm template ospere ./charts/ospere \
+            --namespace ospere \
+            -f ./charts/ospere/ci/all-values.yaml \
+            >"${rendered}"
+
+          ruby - "${rendered}" <<'RUBY'
+          require "yaml"
+
+          path = ARGV.fetch(0)
+          docs = YAML.load_stream(File.read(path))
+          migration = docs.find do |doc|
+            doc.is_a?(Hash) && doc["kind"] == "Job" && doc.dig("metadata", "name") == "ospere-migrate"
+          end
+
+          raise "ospere migration job missing from rendered chart" if migration.nil?
+
+          pod_spec = migration.dig("spec", "template", "spec")
+          raise "ospere migration pod spec missing from rendered chart" if pod_spec.nil?
+
+          if pod_spec.key?("serviceAccountName")
+            raise "ospere pre-install migration hook must not reference chart-created serviceAccountName by default"
+          end
+
+          service_account = docs.find do |doc|
+            doc.is_a?(Hash) && doc["kind"] == "ServiceAccount" && doc.dig("metadata", "name") == "ospere"
+          end
+
+          raise "ospere runtime service account missing from rendered chart" if service_account.nil?
+          RUBY

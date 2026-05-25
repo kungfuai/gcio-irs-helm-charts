@@ -17,7 +17,9 @@ spec:
         {{- include "ospere.labels" . | nindent 8 }}
         app.kubernetes.io/component: migrate
     spec:
-      serviceAccountName: {{ include "ospere.serviceAccountName" . }}
+      {{- if .Values.jobs.migrate.serviceAccountName }}
+      serviceAccountName: {{ .Values.jobs.migrate.serviceAccountName | quote }}
+      {{- end }}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
