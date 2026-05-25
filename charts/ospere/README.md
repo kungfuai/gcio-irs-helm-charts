@@ -25,8 +25,10 @@ hooks run before normal chart resources, so referencing the chart-created Ospere
 ServiceAccount would break first installs.
 
 The ensure-admin hook is disabled by default. When enabled, it runs after locked
-migrations and reads `DJANGO_ADMIN_USERNAME`, `DJANGO_ADMIN_EMAIL`, and
-`DJANGO_ADMIN_PASSWORD` from `jobs.ensureAdmin.existingSecret`.
+migrations, executes `python manage.py syncadmin`, and reads
+`DJANGO_ADMIN_USERNAME`, `DJANGO_ADMIN_EMAIL`, and `DJANGO_ADMIN_PASSWORD` from
+`jobs.ensureAdmin.existingSecret`. The command creates the admin user if missing
+and rotates the password when the user already exists.
 
 MeF A2A configuration requires more than the mounted certificate. The chart exposes
 the X.509 cert path, private key path, `AppSysID` (`MEF_CLIENT_SYSTEM_ID`), EFIN,

@@ -95,7 +95,7 @@ spec:
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          command: ["python", "manage.py", "ensureadmin"]
+          command: ["python", "manage.py", "syncadmin"]
           {{- include "ospere.environment" . | nindent 10 }}
             {{- include "ospere.serviceComponentEnv" (dict "component" "job.ensure-admin") | nindent 12 }}
             - name: DJANGO_ADMIN_USERNAME
