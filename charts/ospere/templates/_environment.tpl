@@ -65,9 +65,25 @@ env:
   # MeF
   - name: MEF_ENVIRONMENT
     value: {{ .Values.ospere.mef.environment | quote }}
+  {{- if .Values.ospere.mef.clientSystemIDs }}
+  - name: MEF_CLIENT_SYSTEM_IDS
+    value: {{ join "," .Values.ospere.mef.clientSystemIDs | quote }}
+  {{- else if and .Values.ospere.mef.cert.secretName .Values.ospere.mef.cert.clientSystemIDsKey }}
+  - name: MEF_CLIENT_SYSTEM_IDS
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.ospere.mef.cert.secretName | quote }}
+        key: {{ .Values.ospere.mef.cert.clientSystemIDsKey | quote }}
+  {{- end }}
   {{- if .Values.ospere.mef.clientSystemID }}
   - name: MEF_CLIENT_SYSTEM_ID
     value: {{ .Values.ospere.mef.clientSystemID | quote }}
+  {{- else if and .Values.ospere.mef.cert.secretName .Values.ospere.mef.cert.clientSystemIDKey }}
+  - name: MEF_CLIENT_SYSTEM_ID
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.ospere.mef.cert.secretName | quote }}
+        key: {{ .Values.ospere.mef.cert.clientSystemIDKey | quote }}
   {{- end }}
   {{- if .Values.ospere.mef.efin }}
   - name: MEF_EFIN
@@ -76,6 +92,12 @@ env:
   {{- if .Values.ospere.mef.etin }}
   - name: MEF_ETIN
     value: {{ .Values.ospere.mef.etin | quote }}
+  {{- else if and .Values.ospere.mef.cert.secretName .Values.ospere.mef.cert.etinKey }}
+  - name: MEF_ETIN
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.ospere.mef.cert.secretName | quote }}
+        key: {{ .Values.ospere.mef.cert.etinKey | quote }}
   {{- end }}
   {{- if .Values.ospere.mef.softwareID }}
   - name: MEF_SOFTWARE_ID

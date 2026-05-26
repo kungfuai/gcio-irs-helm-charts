@@ -39,18 +39,8 @@ spec:
           command: ["python", "manage.py", "lockedmigrate", "--noinput"]
           {{- include "ospere.environment" . | nindent 10 }}
             {{- include "ospere.serviceComponentEnv" (dict "component" "job.migrate") | nindent 12 }}
-          {{- if .Values.ospere.mef.cert.secretName }}
-          volumeMounts:
-            - name: mef-cert
-              mountPath: {{ .Values.ospere.mef.cert.mountPath | quote }}
-              readOnly: true
-          {{- end }}
-      {{- if .Values.ospere.mef.cert.secretName }}
-      volumes:
-        - name: mef-cert
-          secret:
-            secretName: {{ .Values.ospere.mef.cert.secretName | quote }}
-      {{- end }}
+          {{- include "ospere.mefCertVolumeMounts" . | nindent 10 }}
+      {{- include "ospere.mefCertVolumes" . | nindent 6 }}
       restartPolicy: Never
   backoffLimit: {{ .Values.jobs.migrate.backoffLimit | default 5 }}
 {{- end }}
@@ -113,18 +103,8 @@ spec:
                 secretKeyRef:
                   name: {{ required "jobs.ensureAdmin.existingSecret is required when jobs.ensureAdmin.create is true" .Values.jobs.ensureAdmin.existingSecret | quote }}
                   key: {{ .Values.jobs.ensureAdmin.passwordKey | quote }}
-          {{- if .Values.ospere.mef.cert.secretName }}
-          volumeMounts:
-            - name: mef-cert
-              mountPath: {{ .Values.ospere.mef.cert.mountPath | quote }}
-              readOnly: true
-          {{- end }}
-      {{- if .Values.ospere.mef.cert.secretName }}
-      volumes:
-        - name: mef-cert
-          secret:
-            secretName: {{ .Values.ospere.mef.cert.secretName | quote }}
-      {{- end }}
+          {{- include "ospere.mefCertVolumeMounts" . | nindent 10 }}
+      {{- include "ospere.mefCertVolumes" . | nindent 6 }}
       restartPolicy: Never
   backoffLimit: {{ .Values.jobs.ensureAdmin.backoffLimit | default 5 }}
 {{- end -}}

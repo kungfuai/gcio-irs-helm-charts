@@ -31,10 +31,18 @@ migrations, executes `python manage.py syncadmin`, and reads
 and rotates the password when the user already exists.
 
 MeF A2A configuration requires more than the mounted certificate. The chart exposes
-the X.509 cert path, private key path, `AppSysID` (`MEF_CLIENT_SYSTEM_ID`), EFIN,
-ETIN, software ID, endpoint, environment, and WSDL paths. The application must also
-read any exposed env vars; at chart introduction time Ospere still needs app-side
-support for `MEF_SOFTWARE_ID`.
+the X.509 cert path, private key path, ordered `AppSysID`/ASID list
+(`MEF_CLIENT_SYSTEM_IDS`), deprecated singular `AppSysID`
+(`MEF_CLIENT_SYSTEM_ID`), EFIN, ETIN, software ID, endpoint, environment, and WSDL
+paths.
+
+`ospere.mef.clientSystemIDs` is rendered as comma-separated
+`MEF_CLIENT_SYSTEM_IDS`. During the compatibility period the chart can also render
+`MEF_CLIENT_SYSTEM_ID`. If `ospere.mef.cert.secretName` is set, the chart can read
+`MEF_CLIENT_SYSTEM_IDS`, `MEF_CLIENT_SYSTEM_ID`, and `MEF_ETIN` from keys in the
+same Kubernetes Secret that mounts the MeF certificate bundle. This keeps
+certificate and MeF account metadata on the same deployment path while the app
+derives the active request AppSysID from the first ordered value.
 
 Environment wiring should provide the public host through chart values. The expected
 GovCIO host pattern is:

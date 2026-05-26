@@ -3,6 +3,9 @@ ospere:
   csrfTrustedOrigins: "https://ospere.example.com"
   mef:
     environment: "ats"
+    clientSystemIDs:
+      - "client-system"
+      - "client-system-secondary"
     clientSystemID: "client-system"
     efin: "123456"
     etin: "12345"
