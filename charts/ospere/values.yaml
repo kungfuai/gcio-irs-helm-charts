@@ -19,6 +19,7 @@ ospere:
   awsQuerystringExpire: 3600
   mef:
     environment: "ats"
+    clientSystemIDs: []
     clientSystemID: ""
     efin: ""
     etin: ""
@@ -31,6 +32,9 @@ ospere:
       mountPath: "/var/run/ospere/mef"
       certKey: "cert.pem"
       privateKeyKey: "key.pem"
+      clientSystemIDsKey: "client_system_ids"
+      clientSystemIDKey: "client_system_id"
+      etinKey: "etin"
 
 web:
   command: []

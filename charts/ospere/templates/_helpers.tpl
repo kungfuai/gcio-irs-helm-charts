@@ -91,3 +91,21 @@ default
 {{- define "ospere.image" -}}
 {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
 {{- end -}}
+
+{{- define "ospere.mefCertVolumeMounts" -}}
+{{- if .Values.ospere.mef.cert.secretName }}
+volumeMounts:
+  - name: mef-cert
+    mountPath: {{ .Values.ospere.mef.cert.mountPath | quote }}
+    readOnly: true
+{{- end }}
+{{- end -}}
+
+{{- define "ospere.mefCertVolumes" -}}
+{{- if .Values.ospere.mef.cert.secretName }}
+volumes:
+  - name: mef-cert
+    secret:
+      secretName: {{ .Values.ospere.mef.cert.secretName | quote }}
+{{- end }}
+{{- end -}}

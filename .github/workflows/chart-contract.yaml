@@ -130,4 +130,58 @@ jobs:
           end
 
           raise "ospere runtime service account missing from rendered chart" if service_account.nil?
+
+          deployment = docs.find do |doc|
+            doc.is_a?(Hash) && doc["kind"] == "Deployment" && doc.dig("metadata", "name") == "ospere"
+          end
+
+          raise "ospere deployment missing from rendered chart" if deployment.nil?
+
+          web_container = deployment.dig("spec", "template", "spec", "containers", 0)
+          raise "ospere web container missing from rendered chart" if web_container.nil?
+
+          web_env = web_container["env"] || []
+          env_by_name = web_env.each_with_object({}) { |env_var, refs| refs[env_var["name"]] = env_var }
+
+          raise "ospere chart must render canonical MEF_CLIENT_SYSTEM_IDS" unless env_by_name.dig("MEF_CLIENT_SYSTEM_IDS", "value") == "client-system,client-system-secondary"
+          raise "ospere chart must preserve compatibility MEF_CLIENT_SYSTEM_ID" unless env_by_name.dig("MEF_CLIENT_SYSTEM_ID", "value") == "client-system"
+          RUBY
+
+          secret_rendered="$(mktemp)"
+          helm template ospere ./charts/ospere \
+            --namespace ospere \
+            --set database.host=postgres.example.com \
+            --set aws.s3.artifactsBucket=ospere-artifacts \
+            --set ospere.mef.cert.secretName=ospere-mef-client-cert-bundle \
+            >"${secret_rendered}"
+
+          ruby - "${secret_rendered}" <<'RUBY'
+          require "yaml"
+
+          path = ARGV.fetch(0)
+          docs = YAML.load_stream(File.read(path))
+          deployment = docs.find do |doc|
+            doc.is_a?(Hash) && doc["kind"] == "Deployment" && doc.dig("metadata", "name") == "ospere"
+          end
+
+          raise "ospere deployment missing from secret-backed rendered chart" if deployment.nil?
+
+          web_container = deployment.dig("spec", "template", "spec", "containers", 0)
+          raise "ospere web container missing from secret-backed rendered chart" if web_container.nil?
+
+          web_env = web_container["env"] || []
+          env_by_name = web_env.each_with_object({}) { |env_var, refs| refs[env_var["name"]] = env_var }
+
+          expected_refs = {
+            "MEF_CLIENT_SYSTEM_IDS" => {"name" => "ospere-mef-client-cert-bundle", "key" => "client_system_ids"},
+            "MEF_CLIENT_SYSTEM_ID" => {"name" => "ospere-mef-client-cert-bundle", "key" => "client_system_id"},
+            "MEF_ETIN" => {"name" => "ospere-mef-client-cert-bundle", "key" => "etin"},
+          }
+
+          expected_refs.each do |name, expected|
+            actual = env_by_name.dig(name, "valueFrom", "secretKeyRef")
+            raise "ospere chart must render #{name} from the MeF cert Secret" unless actual == expected
+          end
+
+          raise "ospere chart must mount the MeF cert Secret" unless web_container["volumeMounts"]&.any? { |mount| mount["name"] == "mef-cert" }
           RUBY
