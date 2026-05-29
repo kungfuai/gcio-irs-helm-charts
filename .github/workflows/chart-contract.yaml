@@ -175,7 +175,9 @@ jobs:
           expected_refs = {
             "MEF_CLIENT_SYSTEM_IDS" => {"name" => "ospere-mef-client-cert-bundle", "key" => "client_system_ids"},
             "MEF_CLIENT_SYSTEM_ID" => {"name" => "ospere-mef-client-cert-bundle", "key" => "client_system_id"},
+            "MEF_EFIN" => {"name" => "ospere-mef-client-cert-bundle", "key" => "efin"},
             "MEF_ETIN" => {"name" => "ospere-mef-client-cert-bundle", "key" => "etin"},
+            "MEF_SOFTWARE_ID" => {"name" => "ospere-mef-client-cert-bundle", "key" => "software_id"},
           }
 
           expected_refs.each do |name, expected|
@@ -184,4 +186,33 @@ jobs:
           end
 
           raise "ospere chart must mount the MeF cert Secret" unless web_container["volumeMounts"]&.any? { |mount| mount["name"] == "mef-cert" }
+          RUBY
+
+          worker_rendered="$(mktemp)"
+          helm template ospere ./charts/ospere \
+            --namespace ospere \
+            -f ./charts/ospere/ci/all-values.yaml \
+            --set worker.enabled=true \
+            --set worker.concurrency=5 \
+            >"${worker_rendered}"
+
+          ruby - "${worker_rendered}" <<'RUBY'
+          require "yaml"
+
+          path = ARGV.fetch(0)
+          docs = YAML.load_stream(File.read(path))
+          deployment = docs.find do |doc|
+            doc.is_a?(Hash) && doc["kind"] == "Deployment" && doc.dig("metadata", "name") == "ospere-worker"
+          end
+
+          raise "ospere worker deployment missing from rendered chart" if deployment.nil?
+
+          worker_container = deployment.dig("spec", "template", "spec", "containers", 0)
+          raise "ospere worker container missing from rendered chart" if worker_container.nil?
+
+          worker_env = worker_container["env"] || []
+          env_by_name = worker_env.each_with_object({}) { |env_var, refs| refs[env_var["name"]] = env_var }
+
+          raise "ospere worker must render CELERY_WORKER_CONCURRENCY" unless env_by_name.dig("CELERY_WORKER_CONCURRENCY", "value") == "5"
+          raise "ospere worker args must pass CELERY_WORKER_CONCURRENCY to Celery" unless worker_container["args"]&.include?("--concurrency=$(CELERY_WORKER_CONCURRENCY)")
           RUBY

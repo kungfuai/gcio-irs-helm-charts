@@ -49,6 +49,8 @@ spec:
             {{- toYaml .Values.worker.args | nindent 12 }}
           {{- include "ospere.environment" . | nindent 10 }}
             {{- include "ospere.serviceComponentEnv" (dict "component" "celery.worker") | nindent 12 }}
+            - name: CELERY_WORKER_CONCURRENCY
+              value: {{ .Values.worker.concurrency | quote }}
           {{- with .Values.worker.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
