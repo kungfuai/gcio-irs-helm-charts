@@ -105,15 +105,19 @@ env:
         name: {{ .Values.ospere.mef.cert.secretName | quote }}
         key: {{ .Values.ospere.mef.cert.etinKey | quote }}
   {{- end }}
-  {{- if .Values.ospere.mef.softwareID }}
-  - name: MEF_SOFTWARE_ID
-    value: {{ .Values.ospere.mef.softwareID | quote }}
-  {{- else if and .Values.ospere.mef.cert.secretName .Values.ospere.mef.cert.softwareIDKey }}
-  - name: MEF_SOFTWARE_ID
+  {{- if .Values.ospere.mef.softwareIDsByTaxYear }}
+  - name: MEF_SOFTWARE_IDS_BY_TAX_YEAR
+    value: {{ .Values.ospere.mef.softwareIDsByTaxYear | toJson | quote }}
+  {{- else if and .Values.ospere.mef.cert.secretName .Values.ospere.mef.cert.softwareIDsByTaxYearKey }}
+  - name: MEF_SOFTWARE_IDS_BY_TAX_YEAR
     valueFrom:
       secretKeyRef:
         name: {{ .Values.ospere.mef.cert.secretName | quote }}
-        key: {{ .Values.ospere.mef.cert.softwareIDKey | quote }}
+        key: {{ .Values.ospere.mef.cert.softwareIDsByTaxYearKey | quote }}
+  {{- end }}
+  {{- if .Values.ospere.mef.defaultTaxYear }}
+  - name: MEF_DEFAULT_TAX_YEAR
+    value: {{ .Values.ospere.mef.defaultTaxYear | quote }}
   {{- end }}
   {{- if .Values.ospere.mef.endpointURL }}
   - name: MEF_ENDPOINT_URL

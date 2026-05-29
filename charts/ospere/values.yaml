@@ -23,7 +23,8 @@ ospere:
     clientSystemID: ""
     efin: ""
     etin: ""
-    softwareID: ""
+    softwareIDsByTaxYear: {}
+    defaultTaxYear: ""
     endpointURL: ""
     msiWSDL: "wsdl/MeFMSIServices.wsdl"
     transmitterWSDL: "wsdl/MeFTransmitterServicesMTOM.wsdl"
@@ -36,7 +37,7 @@ ospere:
       clientSystemIDKey: "client_system_id"
       efinKey: "efin"
       etinKey: "etin"
-      softwareIDKey: "software_id"
+      softwareIDsByTaxYearKey: "software_ids_by_tax_year"
 
 web:
   command: []
