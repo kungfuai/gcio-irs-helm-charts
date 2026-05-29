@@ -33,17 +33,22 @@ and rotates the password when the user already exists.
 MeF A2A configuration requires more than the mounted certificate. The chart exposes
 the X.509 cert path, private key path, ordered `AppSysID`/ASID list
 (`MEF_CLIENT_SYSTEM_IDS`), deprecated singular `AppSysID`
-(`MEF_CLIENT_SYSTEM_ID`), EFIN, ETIN, software ID, endpoint, environment, and WSDL
-paths.
+(`MEF_CLIENT_SYSTEM_ID`), EFIN, ETIN, tax-year SoftwareId map, default tax
+year, endpoint, environment, and WSDL paths.
 
 `ospere.mef.clientSystemIDs` is rendered as comma-separated
 `MEF_CLIENT_SYSTEM_IDS`. During the compatibility period the chart can also render
 `MEF_CLIENT_SYSTEM_ID`. If `ospere.mef.cert.secretName` is set, the chart can read
 `MEF_CLIENT_SYSTEM_IDS`, `MEF_CLIENT_SYSTEM_ID`, `MEF_EFIN`, `MEF_ETIN`, and
-`MEF_SOFTWARE_ID` from keys in the same Kubernetes Secret that mounts the MeF
-certificate bundle. This keeps
+`MEF_SOFTWARE_IDS_BY_TAX_YEAR` from keys in the same Kubernetes Secret that
+mounts the MeF certificate bundle. This keeps
 certificate and MeF account metadata on the same deployment path while the app
 derives the active request AppSysID from the first ordered value.
+
+`ospere.mef.softwareIDsByTaxYear` renders directly as JSON when set in values.
+When `ospere.mef.cert.secretName` is set, the chart reads the JSON value from
+`software_ids_by_tax_year`. `ospere.mef.defaultTaxYear` renders
+`MEF_DEFAULT_TAX_YEAR` for MeF calls that do not carry a request tax year.
 
 When the optional Celery worker is enabled, `worker.concurrency` renders
 `CELERY_WORKER_CONCURRENCY`. The default worker args pass that value to Celery as

@@ -7,6 +7,7 @@
 # assertions so CI YAML stays wiring-only.
 
 require "open3"
+require "json"
 require "yaml"
 
 ROOT = File.expand_path("../..", __dir__)
@@ -137,6 +138,11 @@ def validate_ospere_hook_contract!
     raise "ospere chart must render canonical MEF_CLIENT_SYSTEM_IDS"
   end
   raise "ospere chart must preserve compatibility MEF_CLIENT_SYSTEM_ID" unless web_env.dig("MEF_CLIENT_SYSTEM_ID", "value") == "client-system"
+  expected_software_ids = {"2024" => "24024829", "2025" => "25024827", "2026" => "26024828"}
+  unless JSON.parse(web_env.dig("MEF_SOFTWARE_IDS_BY_TAX_YEAR", "value")) == expected_software_ids
+    raise "ospere chart must render canonical MEF_SOFTWARE_IDS_BY_TAX_YEAR"
+  end
+  raise "ospere chart must render MEF_DEFAULT_TAX_YEAR" unless web_env.dig("MEF_DEFAULT_TAX_YEAR", "value") == "2025"
 end
 
 def validate_ospere_secret_backed_env_contract!
@@ -158,7 +164,7 @@ def validate_ospere_secret_backed_env_contract!
       "MEF_CLIENT_SYSTEM_ID" => {"name" => "ospere-mef-client-cert-bundle", "key" => "client_system_id"},
       "MEF_EFIN" => {"name" => "ospere-mef-client-cert-bundle", "key" => "efin"},
       "MEF_ETIN" => {"name" => "ospere-mef-client-cert-bundle", "key" => "etin"},
-      "MEF_SOFTWARE_ID" => {"name" => "ospere-mef-client-cert-bundle", "key" => "software_id"}
+      "MEF_SOFTWARE_IDS_BY_TAX_YEAR" => {"name" => "ospere-mef-client-cert-bundle", "key" => "software_ids_by_tax_year"}
     },
     "ospere chart"
   )
