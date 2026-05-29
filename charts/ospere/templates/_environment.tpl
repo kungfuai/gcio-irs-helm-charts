@@ -88,6 +88,12 @@ env:
   {{- if .Values.ospere.mef.efin }}
   - name: MEF_EFIN
     value: {{ .Values.ospere.mef.efin | quote }}
+  {{- else if and .Values.ospere.mef.cert.secretName .Values.ospere.mef.cert.efinKey }}
+  - name: MEF_EFIN
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.ospere.mef.cert.secretName | quote }}
+        key: {{ .Values.ospere.mef.cert.efinKey | quote }}
   {{- end }}
   {{- if .Values.ospere.mef.etin }}
   - name: MEF_ETIN
@@ -102,6 +108,12 @@ env:
   {{- if .Values.ospere.mef.softwareID }}
   - name: MEF_SOFTWARE_ID
     value: {{ .Values.ospere.mef.softwareID | quote }}
+  {{- else if and .Values.ospere.mef.cert.secretName .Values.ospere.mef.cert.softwareIDKey }}
+  - name: MEF_SOFTWARE_ID
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.ospere.mef.cert.secretName | quote }}
+        key: {{ .Values.ospere.mef.cert.softwareIDKey | quote }}
   {{- end }}
   {{- if .Values.ospere.mef.endpointURL }}
   - name: MEF_ENDPOINT_URL

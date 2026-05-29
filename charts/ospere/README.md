@@ -39,10 +39,15 @@ paths.
 `ospere.mef.clientSystemIDs` is rendered as comma-separated
 `MEF_CLIENT_SYSTEM_IDS`. During the compatibility period the chart can also render
 `MEF_CLIENT_SYSTEM_ID`. If `ospere.mef.cert.secretName` is set, the chart can read
-`MEF_CLIENT_SYSTEM_IDS`, `MEF_CLIENT_SYSTEM_ID`, and `MEF_ETIN` from keys in the
-same Kubernetes Secret that mounts the MeF certificate bundle. This keeps
+`MEF_CLIENT_SYSTEM_IDS`, `MEF_CLIENT_SYSTEM_ID`, `MEF_EFIN`, `MEF_ETIN`, and
+`MEF_SOFTWARE_ID` from keys in the same Kubernetes Secret that mounts the MeF
+certificate bundle. This keeps
 certificate and MeF account metadata on the same deployment path while the app
 derives the active request AppSysID from the first ordered value.
+
+When the optional Celery worker is enabled, `worker.concurrency` renders
+`CELERY_WORKER_CONCURRENCY`. The default worker args pass that value to Celery as
+`--concurrency=$(CELERY_WORKER_CONCURRENCY)`. The default concurrency is `5`.
 
 Environment wiring should provide the public host through chart values. The expected
 GovCIO host pattern is:

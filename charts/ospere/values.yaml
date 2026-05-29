@@ -34,7 +34,9 @@ ospere:
       privateKeyKey: "key.pem"
       clientSystemIDsKey: "client_system_ids"
       clientSystemIDKey: "client_system_id"
+      efinKey: "efin"
       etinKey: "etin"
+      softwareIDKey: "software_id"
 
 web:
   command: []
@@ -43,8 +45,9 @@ web:
 worker:
   enabled: false
   replicaCount: 1
+  concurrency: 5
   command: ["celery"]
-  args: ["-A", "ospere", "worker", "--loglevel=INFO"]
+  args: ["-A", "ospere", "worker", "--loglevel=INFO", "--concurrency=$(CELERY_WORKER_CONCURRENCY)"]
   resources: {}
 
 beat:
