@@ -36,6 +36,24 @@ facture` to see the charts.
 - Use `helm template --debug` to render chart templates locally
 - Use `helm install --dry-run --debug` to render chart locally without installing certs in the cluster, setting `--dry-run=server` will also perform any lookups on the server.
 
+## CI/CD Contract
+
+This repo owns reusable Helm chart artifacts. It does not own app image
+promotion, release manifests, environment-specific deploy state, smoke/canary
+execution, or AWS resource bootstrap.
+
+Pull request CI runs chart contract tests under `tests/chart_contract`:
+
+- lint and render chart fixtures
+- assert chart-level Kubernetes invariants for Ospere and Facture charts
+- assert changed charts use an unreleased `Chart.yaml` version
+
+Pushes to `main` run chart release only:
+
+- re-check changed chart release versions
+- package and publish changed charts with chart-releaser
+- update the chart repository index
+
 ## PGP Keys
 
 PGP keys are used to sign helm charts with the chart releaser action. These keys are stored in GitHub secrets and the public keys can also be used to verify the helm charts have not been tampered with.

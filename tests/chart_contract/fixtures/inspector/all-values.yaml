@@ -1,0 +1,12 @@
+image:
+  repository: "example.com/facture-inspector"
+  tag: "contract"
+
+ingress:
+  enabled: true
+  className: "alb"
+  hosts:
+    - host: "inspector.example.com"
+      paths:
+        - path: /
+          pathType: Prefix
