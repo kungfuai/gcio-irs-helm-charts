@@ -152,6 +152,8 @@ def validate_ospere_secret_backed_env_contract!
     "--namespace", "ospere",
     "--set", "database.host=postgres.example.com",
     "--set", "aws.s3.artifactsBucket=ospere-artifacts",
+    "--set", "secrets.celeryBrokerURL.name=ospere-db",
+    "--set", "secrets.celeryResultBackend.name=ospere-db",
     "--set", "ospere.mef.cert.secretName=ospere-mef-client-cert-bundle"
   )
   deployment = find_doc!(docs, kind: "Deployment", name: "ospere")
@@ -178,8 +180,10 @@ def validate_ospere_worker_contract!
     "ospere",
     "ospere",
     "--namespace", "ospere",
-    "-f", "./charts/ospere/ci/all-values.yaml",
-    "--set", "worker.enabled=true",
+    "--set", "database.host=postgres.example.com",
+    "--set", "aws.s3.artifactsBucket=ospere-artifacts",
+    "--set", "secrets.celeryBrokerURL.name=ospere-db",
+    "--set", "secrets.celeryResultBackend.name=ospere-db",
     "--set", "worker.concurrency=5"
   )
   deployment = find_doc!(docs, kind: "Deployment", name: "ospere-worker")
@@ -190,6 +194,8 @@ def validate_ospere_worker_contract!
   unless (worker_container["args"] || []).include?("--concurrency=$(CELERY_WORKER_CONCURRENCY)")
     raise "ospere worker args must pass CELERY_WORKER_CONCURRENCY to Celery"
   end
+
+  find_doc!(docs, kind: "Deployment", name: "ospere-beat")
 end
 
 begin

@@ -44,7 +44,7 @@ web:
   args: []
 
 worker:
-  enabled: false
+  enabled: true
   replicaCount: 1
   concurrency: 5
   command: ["celery"]
@@ -52,7 +52,7 @@ worker:
   resources: {}
 
 beat:
-  enabled: false
+  enabled: true
   replicaCount: 1
   command: ["celery"]
   args: ["-A", "ospere", "beat", "--loglevel=INFO"]
