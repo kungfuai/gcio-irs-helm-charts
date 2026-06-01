@@ -50,9 +50,13 @@ When `ospere.mef.cert.secretName` is set, the chart reads the JSON value from
 `software_ids_by_tax_year`. `ospere.mef.defaultTaxYear` renders
 `MEF_DEFAULT_TAX_YEAR` for MeF calls that do not carry a request tax year.
 
-When the optional Celery worker is enabled, `worker.concurrency` renders
-`CELERY_WORKER_CONCURRENCY`. The default worker args pass that value to Celery as
+The Celery worker and beat deployments are enabled by default. The worker's
+`worker.concurrency` value renders `CELERY_WORKER_CONCURRENCY`, and the default
+worker args pass that value to Celery as
 `--concurrency=$(CELERY_WORKER_CONCURRENCY)`. The default concurrency is `5`.
+Because worker and beat are enabled by default, deployments must provide
+`secrets.celeryBrokerURL.name` or `secrets.celeryBrokerURL.value`. Worker also
+uses `secrets.celeryResultBackend` when result storage is configured.
 
 Environment wiring should provide the public host through chart values. The expected
 GovCIO host pattern is:
