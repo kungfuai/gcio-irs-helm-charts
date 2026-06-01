@@ -6,6 +6,7 @@ on:
       - 'charts/**/*.yaml'
       - 'charts/**/*.tpl'
       - 'charts/**/templates/**'
+      - '.github/scripts/**/*.rb'
       - '.github/workflows/**/*.yml'
       - '.github/workflows/**/*.yaml'
 
@@ -16,9 +17,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Helm
         uses: azure/setup-helm@v4
 
       - name: Validate chart contracts
         run: ruby .github/scripts/validate_chart_contracts.rb
+
+      - name: Validate changed chart release versions
+        run: ruby .github/scripts/validate_chart_release_versions.rb --base "origin/${{ github.base_ref }}"
