@@ -22,7 +22,7 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Validate changed chart release versions
-        run: ruby .github/scripts/validate_chart_release_versions.rb --base "${{ github.event.before }}"
+        run: python3 .github/scripts/validate_chart_release_versions.py --base "${{ github.event.before }}"
 
       - name: Prepare GPG key
         run: |
