@@ -1,6 +1,10 @@
 ospere:
   allowedHosts: "ospere.example.com"
   csrfTrustedOrigins: "https://ospere.example.com"
+  apiAuth:
+    mode: "hawk"
+    hawk:
+      secretName: "ospere-hawk-auth"
   mef:
     environment: "ats"
     clientSystemIDs:

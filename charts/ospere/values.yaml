@@ -17,6 +17,13 @@ ospere:
   storageBackend: "s3"
   localStorageRoot: "/app/storage/artifacts"
   awsQuerystringExpire: 3600
+  apiAuth:
+    mode: "disabled"
+    hawk:
+      secretName: ""
+      clientIdKey: "client_id"
+      clientKeyKey: "client_key"
+      algorithm: "sha256"
   mef:
     environment: "ats"
     clientSystemIDs: []
