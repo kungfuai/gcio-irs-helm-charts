@@ -9,6 +9,21 @@ Ospere pods are configured primarily through environment variables.
 {{- if and .Values.beat.enabled (not $celeryBrokerConfigured) -}}
 {{- fail "beat.enabled requires secrets.celeryBrokerURL.value when secrets.create is true, or secrets.celeryBrokerURL.name when secrets.create is false" -}}
 {{- end -}}
+{{- $apiAuthMode := required "ospere.apiAuth.mode is required" .Values.ospere.apiAuth.mode -}}
+{{- if not (has $apiAuthMode (list "disabled" "hawk")) -}}
+{{- fail "ospere.apiAuth.mode must be one of: disabled, hawk" -}}
+{{- end -}}
+{{- if eq $apiAuthMode "hawk" -}}
+{{- if not .Values.ospere.apiAuth.hawk.secretName -}}
+{{- fail "ospere.apiAuth.hawk.secretName is required when ospere.apiAuth.mode=hawk" -}}
+{{- end -}}
+{{- if not .Values.ospere.apiAuth.hawk.clientIdKey -}}
+{{- fail "ospere.apiAuth.hawk.clientIdKey is required when ospere.apiAuth.mode=hawk" -}}
+{{- end -}}
+{{- if not .Values.ospere.apiAuth.hawk.clientKeyKey -}}
+{{- fail "ospere.apiAuth.hawk.clientKeyKey is required when ospere.apiAuth.mode=hawk" -}}
+{{- end -}}
+{{- end -}}
 env:
   # Django
   - name: DJANGO_SETTINGS_MODULE
@@ -40,6 +55,24 @@ env:
   {{- if .Values.ospere.csrfTrustedOrigins }}
   - name: CSRF_TRUSTED_ORIGINS
     value: {{ .Values.ospere.csrfTrustedOrigins | quote }}
+  {{- end }}
+
+  # API auth
+  - name: OSPERE_API_AUTH_MODE
+    value: {{ $apiAuthMode | quote }}
+  {{- if eq $apiAuthMode "hawk" }}
+  - name: HAWK_CLIENT_ID
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.ospere.apiAuth.hawk.secretName | quote }}
+        key: {{ .Values.ospere.apiAuth.hawk.clientIdKey | quote }}
+  - name: HAWK_CLIENT_KEY
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.ospere.apiAuth.hawk.secretName | quote }}
+        key: {{ .Values.ospere.apiAuth.hawk.clientKeyKey | quote }}
+  - name: HAWK_ALGORITHM
+    value: {{ .Values.ospere.apiAuth.hawk.algorithm | default "sha256" | quote }}
   {{- end }}
 
   # AWS/S3-compatible storage

@@ -30,6 +30,15 @@ migrations, executes `python manage.py syncadmin`, and reads
 `jobs.ensureAdmin.existingSecret`. The command creates the admin user if missing
 and rotates the password when the user already exists.
 
+API authentication is controlled by `ospere.apiAuth.mode`. Supported modes are
+`disabled` and `hawk`. `disabled` is intended for local/dev-only use. In deployed
+environments, set `ospere.apiAuth.mode=hawk` and provide `ospere.apiAuth.hawk.secretName`.
+By default, the chart reads `client_id` and `client_key` from that Secret (override via
+`ospere.apiAuth.hawk.clientIdKey` / `ospere.apiAuth.hawk.clientKeyKey`). The chart renders `OSPERE_API_AUTH_MODE`, `HAWK_CLIENT_ID`, `HAWK_CLIENT_KEY`, and
+`HAWK_ALGORITHM` into web, worker, beat, migrate, and ensure-admin workloads.
+When mode is `hawk`, missing Hawk secret references fail chart rendering instead
+of falling back to unauthenticated behavior.
+
 MeF A2A configuration requires more than the mounted certificate. The chart exposes
 the X.509 cert path, private key path, ordered `AppSysID`/ASID list
 (`MEF_CLIENT_SYSTEM_IDS`), deprecated singular `AppSysID`
