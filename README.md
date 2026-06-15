@@ -42,11 +42,17 @@ This repo owns reusable Helm chart artifacts. It does not own app image
 promotion, release manifests, environment-specific deploy state, smoke/canary
 execution, or AWS resource bootstrap.
 
-Pull request CI runs chart contract tests under `tests/chart_contract`:
+Pull request CI runs the clusterless chart test tiers (see
+[`docs/adr/0002`](docs/adr/0002-chart-test-taxonomy-and-ci-contracts.md)):
 
 - lint and render chart fixtures
 - assert chart-level Kubernetes invariants for Ospere and Facture charts
+- validate rendered manifests against the Kubernetes API schema with
+  `kubeconform` (charts with a `ci/all-values.yaml` fixture)
 - assert changed charts use an unreleased `Chart.yaml` version
+
+Install (`ct install` + `helm test`) is deferred and live/deployed proof is owned
+by `kfai-infra`, not this repo.
 
 Pushes to `main` run chart release only:
 

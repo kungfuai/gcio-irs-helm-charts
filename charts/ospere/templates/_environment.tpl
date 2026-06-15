@@ -24,6 +24,20 @@ Ospere pods are configured primarily through environment variables.
 {{- fail "ospere.apiAuth.hawk.clientKeyKey is required when ospere.apiAuth.mode=hawk" -}}
 {{- end -}}
 {{- end -}}
+{{- if .Values.ospere.notification.enabled -}}
+{{- if not .Values.ospere.notification.url -}}
+{{- fail "ospere.notification.url is required when ospere.notification.enabled=true" -}}
+{{- end -}}
+{{- if not .Values.ospere.notification.hmac.secretName -}}
+{{- fail "ospere.notification.hmac.secretName is required when ospere.notification.enabled=true" -}}
+{{- end -}}
+{{- if not .Values.ospere.notification.hmac.clientIdKey -}}
+{{- fail "ospere.notification.hmac.clientIdKey is required when ospere.notification.enabled=true" -}}
+{{- end -}}
+{{- if not .Values.ospere.notification.hmac.clientSecretKey -}}
+{{- fail "ospere.notification.hmac.clientSecretKey is required when ospere.notification.enabled=true" -}}
+{{- end -}}
+{{- end -}}
 env:
   # Django
   - name: DJANGO_SETTINGS_MODULE
@@ -73,6 +87,26 @@ env:
         key: {{ .Values.ospere.apiAuth.hawk.clientKeyKey | quote }}
   - name: HAWK_ALGORITHM
     value: {{ .Values.ospere.apiAuth.hawk.algorithm | default "sha256" | quote }}
+  {{- end }}
+
+  # Status notifications (outbound — ADR-0007). ENABLED is always set so the
+  # feature ships dark; url + the infra-synced hmac credential render only when
+  # enabled. The Secret is never chart-created (mirrors apiAuth.hawk).
+  - name: NOTIFICATION_ENABLED
+    value: {{ .Values.ospere.notification.enabled | quote }}
+  {{- if .Values.ospere.notification.enabled }}
+  - name: NOTIFICATION_URL
+    value: {{ .Values.ospere.notification.url | quote }}
+  - name: NOTIFICATION_CLIENT_ID
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.ospere.notification.hmac.secretName | quote }}
+        key: {{ .Values.ospere.notification.hmac.clientIdKey | quote }}
+  - name: NOTIFICATION_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        name: {{ .Values.ospere.notification.hmac.secretName | quote }}
+        key: {{ .Values.ospere.notification.hmac.clientSecretKey | quote }}
   {{- end }}
 
   # AWS/S3-compatible storage

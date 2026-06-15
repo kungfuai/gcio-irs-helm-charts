@@ -37,3 +37,31 @@ jobs:
 
       - name: Validate changed chart release versions
         run: python3 .github/scripts/validate_chart_release_versions.py --base "origin/${{ github.base_ref }}"
+
+      - name: Install kubeconform
+        run: |
+          curl -sSLf https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz \
+            | sudo tar -xz -C /usr/local/bin kubeconform
+
+      - name: Validate rendered manifests (kubeconform)
+        # Render contracts assert the fields we thought to check; kubeconform
+        # asserts the rendered manifests are valid against the Kubernetes API
+        # schema (catches a malformed ref or bad object no assertion covers).
+        # Scoped to charts that ship a ci/all-values.yaml fixture (guaranteed
+        # renderable). -ignore-missing-schemas tolerates CRDs (Karpenter, etc.).
+        run: |
+          set -euo pipefail
+          rc=0
+          for chart in charts/*/; do
+            name="$(basename "$chart")"
+            values="${chart}ci/all-values.yaml"
+            if [ ! -f "$values" ]; then
+              echo "skip ${name}: no ci/all-values.yaml fixture"
+              continue
+            fi
+            echo "== kubeconform ${name} =="
+            helm template "$name" "$chart" --namespace "$name" -f "$values" \
+              | kubeconform -strict -summary -ignore-missing-schemas -kubernetes-version 1.29.0 \
+              || rc=1
+          done
+          exit $rc

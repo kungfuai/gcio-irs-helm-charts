@@ -95,6 +95,18 @@ def test_ospere_value_backed_mef_and_celery_contract() -> None:
         "name": "ospere",
         "key": "celery-broker-url",
     }
+    assert web_env["NOTIFICATION_ENABLED"]["value"] == "true"
+    assert (
+        web_env["NOTIFICATION_URL"]["value"] == "https://bridge.example.com/v1/integrations/ospere/events"
+    )
+    assert web_env["NOTIFICATION_CLIENT_ID"]["valueFrom"]["secretKeyRef"] == {
+        "name": "ospere-notification-hmac",
+        "key": "client_id",
+    }
+    assert web_env["NOTIFICATION_CLIENT_SECRET"]["valueFrom"]["secretKeyRef"] == {
+        "name": "ospere-notification-hmac",
+        "key": "client_secret",
+    }
 
     worker = first_container(find_doc(docs, kind="Deployment", name="ospere-worker"), "ospere worker")
     worker_env = env_by_name(worker)
@@ -106,6 +118,11 @@ def test_ospere_value_backed_mef_and_celery_contract() -> None:
     assert worker_env["OSPERE_SERVICE_COMPONENT"]["value"] == "celery.worker"
     assert worker_env["CELERY_WORKER_CONCURRENCY"]["value"] == "5"
     assert "--concurrency=$(CELERY_WORKER_CONCURRENCY)" in worker["args"]
+    # The worker drains the notification outbox, so it carries the same creds.
+    assert worker_env["NOTIFICATION_CLIENT_SECRET"]["valueFrom"]["secretKeyRef"] == {
+        "name": "ospere-notification-hmac",
+        "key": "client_secret",
+    }
 
     beat_env = env_by_name(first_container(find_doc(docs, kind="Deployment", name="ospere-beat"), "ospere beat"))
     assert beat_env["OSPERE_API_AUTH_MODE"]["value"] == "hawk"
@@ -238,4 +255,93 @@ def test_ospere_api_auth_rejects_unknown_mode() -> None:
             "secrets.celeryBrokerURL.name=ospere-db",
             "--set",
             "ospere.apiAuth.mode=maybe",
+        )
+
+
+def test_ospere_notification_disabled_ships_dark_without_secret_refs() -> None:
+    docs = render_chart(
+        "ospere",
+        "ospere",
+        "--namespace",
+        "ospere",
+        "--set",
+        "database.host=postgres.example.com",
+        "--set",
+        "aws.s3.artifactsBucket=ospere-artifacts",
+        "--set",
+        "secrets.celeryBrokerURL.name=ospere-db",
+    )
+
+    web_env = env_by_name(first_container(find_doc(docs, kind="Deployment", name="ospere"), "ospere web"))
+    # ENABLED is always present (false) so the feature ships dark by default;
+    # nothing else renders, so a promoted release emits no notifications.
+    assert web_env["NOTIFICATION_ENABLED"]["value"] == "false"
+    assert "NOTIFICATION_URL" not in web_env
+    assert "NOTIFICATION_CLIENT_ID" not in web_env
+    assert "NOTIFICATION_CLIENT_SECRET" not in web_env
+
+
+def test_ospere_notification_enabled_requires_secret_reference() -> None:
+    with pytest.raises(RuntimeError, match="ospere.notification.hmac.secretName is required"):
+        render_chart(
+            "ospere",
+            "ospere",
+            "--namespace",
+            "ospere",
+            "--set",
+            "database.host=postgres.example.com",
+            "--set",
+            "aws.s3.artifactsBucket=ospere-artifacts",
+            "--set",
+            "secrets.celeryBrokerURL.name=ospere-db",
+            "--set",
+            "ospere.notification.enabled=true",
+            "--set",
+            "ospere.notification.url=https://bridge.example.com/events",
+        )
+
+
+def test_ospere_notification_enabled_requires_url() -> None:
+    with pytest.raises(RuntimeError, match="ospere.notification.url is required"):
+        render_chart(
+            "ospere",
+            "ospere",
+            "--namespace",
+            "ospere",
+            "--set",
+            "database.host=postgres.example.com",
+            "--set",
+            "aws.s3.artifactsBucket=ospere-artifacts",
+            "--set",
+            "secrets.celeryBrokerURL.name=ospere-db",
+            "--set",
+            "ospere.notification.enabled=true",
+            "--set",
+            "ospere.notification.hmac.secretName=ospere-notification-hmac",
+        )
+
+
+def test_ospere_notification_enabled_requires_non_empty_secret_keys() -> None:
+    # A blanked key would otherwise render secretKeyRef.key: "" — invalid. Mirror
+    # the hawk block, which guards its clientIdKey / clientKeyKey the same way.
+    with pytest.raises(RuntimeError, match="ospere.notification.hmac.clientIdKey is required"):
+        render_chart(
+            "ospere",
+            "ospere",
+            "--namespace",
+            "ospere",
+            "--set",
+            "database.host=postgres.example.com",
+            "--set",
+            "aws.s3.artifactsBucket=ospere-artifacts",
+            "--set",
+            "secrets.celeryBrokerURL.name=ospere-db",
+            "--set",
+            "ospere.notification.enabled=true",
+            "--set",
+            "ospere.notification.url=https://bridge.example.com/events",
+            "--set",
+            "ospere.notification.hmac.secretName=ospere-notification-hmac",
+            "--set",
+            "ospere.notification.hmac.clientIdKey=",
         )

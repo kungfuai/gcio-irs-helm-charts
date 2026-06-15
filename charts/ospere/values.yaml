@@ -24,6 +24,19 @@ ospere:
       clientIdKey: "client_id"
       clientKeyKey: "client_key"
       algorithm: "sha256"
+  # Outbound status notifications (ADR-0007). Ships dark: disabled by default,
+  # so promoting a release without setting these leaves the feature off. When
+  # enabled, url + the hmac credential are required. The hmac Secret is synced by
+  # infra (Secrets Manager -> namespace Secret), never created by this chart —
+  # same lifecycle as apiAuth.hawk. authMode is hmac-only today; none/bearer are
+  # ADR targets and join here when the app reads NOTIFICATION_AUTH_MODE.
+  notification:
+    enabled: false
+    url: ""
+    hmac:
+      secretName: ""
+      clientIdKey: "client_id"
+      clientSecretKey: "client_secret"
   mef:
     environment: "ats"
     clientSystemIDs: []
