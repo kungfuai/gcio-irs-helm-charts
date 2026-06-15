@@ -5,6 +5,11 @@ ospere:
     mode: "hawk"
     hawk:
       secretName: "ospere-hawk-auth"
+  notification:
+    enabled: true
+    url: "https://bridge.example.com/v1/integrations/ospere/events"
+    hmac:
+      secretName: "ospere-notification-hmac"
   mef:
     environment: "ats"
     clientSystemIDs:

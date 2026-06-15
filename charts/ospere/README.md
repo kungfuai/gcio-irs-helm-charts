@@ -39,6 +39,21 @@ By default, the chart reads `client_id` and `client_key` from that Secret (overr
 When mode is `hawk`, missing Hawk secret references fail chart rendering instead
 of falling back to unauthenticated behavior.
 
+Outbound status notifications (ADR-0007) are controlled by
+`ospere.notification`. This is the push half of status delivery: pull (the GET
+endpoints) is the default contract, and push is an opt-in convenience, so the
+feature ships dark — `ospere.notification.enabled` defaults to `false` and a
+release promoted without it leaves notifications off. When enabled, provide
+`ospere.notification.url` and `ospere.notification.hmac.secretName`; the chart
+reads `client_id` and `client_secret` from that Secret (override via
+`ospere.notification.hmac.clientIdKey` / `clientSecretKey`) and renders
+`NOTIFICATION_ENABLED`, `NOTIFICATION_URL`, `NOTIFICATION_CLIENT_ID`, and
+`NOTIFICATION_CLIENT_SECRET`. The hmac Secret is synced by infra (Secrets
+Manager to namespace Secret), never created by this chart — the same lifecycle
+as the Hawk credential. When enabled, a missing url or secret reference fails
+chart rendering. `authMode` is hmac-only today; `none` and `bearer` are ADR
+targets that join here when the app reads `NOTIFICATION_AUTH_MODE`.
+
 MeF A2A configuration requires more than the mounted certificate. The chart exposes
 the X.509 cert path, private key path, ordered `AppSysID`/ASID list
 (`MEF_CLIENT_SYSTEM_IDS`), deprecated singular `AppSysID`
