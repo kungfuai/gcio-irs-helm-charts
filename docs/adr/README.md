@@ -13,3 +13,4 @@ A chart ADR may reference an app ADR as the upstream authority.
 | ADR | Title |
 |---|---|
 | [0001](0001-ospere-outbound-notification-env-wiring.md) | Ospere outbound status-notification env wiring |
+| [0002](0002-chart-test-taxonomy-and-ci-contracts.md) | Chart test taxonomy and CI contracts |

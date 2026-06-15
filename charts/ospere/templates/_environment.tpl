@@ -31,6 +31,12 @@ Ospere pods are configured primarily through environment variables.
 {{- if not .Values.ospere.notification.hmac.secretName -}}
 {{- fail "ospere.notification.hmac.secretName is required when ospere.notification.enabled=true" -}}
 {{- end -}}
+{{- if not .Values.ospere.notification.hmac.clientIdKey -}}
+{{- fail "ospere.notification.hmac.clientIdKey is required when ospere.notification.enabled=true" -}}
+{{- end -}}
+{{- if not .Values.ospere.notification.hmac.clientSecretKey -}}
+{{- fail "ospere.notification.hmac.clientSecretKey is required when ospere.notification.enabled=true" -}}
+{{- end -}}
 {{- end -}}
 env:
   # Django

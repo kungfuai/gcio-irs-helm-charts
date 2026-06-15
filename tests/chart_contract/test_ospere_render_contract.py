@@ -299,3 +299,49 @@ def test_ospere_notification_enabled_requires_secret_reference() -> None:
             "--set",
             "ospere.notification.url=https://bridge.example.com/events",
         )
+
+
+def test_ospere_notification_enabled_requires_url() -> None:
+    with pytest.raises(RuntimeError, match="ospere.notification.url is required"):
+        render_chart(
+            "ospere",
+            "ospere",
+            "--namespace",
+            "ospere",
+            "--set",
+            "database.host=postgres.example.com",
+            "--set",
+            "aws.s3.artifactsBucket=ospere-artifacts",
+            "--set",
+            "secrets.celeryBrokerURL.name=ospere-db",
+            "--set",
+            "ospere.notification.enabled=true",
+            "--set",
+            "ospere.notification.hmac.secretName=ospere-notification-hmac",
+        )
+
+
+def test_ospere_notification_enabled_requires_non_empty_secret_keys() -> None:
+    # A blanked key would otherwise render secretKeyRef.key: "" — invalid. Mirror
+    # the hawk block, which guards its clientIdKey / clientKeyKey the same way.
+    with pytest.raises(RuntimeError, match="ospere.notification.hmac.clientIdKey is required"):
+        render_chart(
+            "ospere",
+            "ospere",
+            "--namespace",
+            "ospere",
+            "--set",
+            "database.host=postgres.example.com",
+            "--set",
+            "aws.s3.artifactsBucket=ospere-artifacts",
+            "--set",
+            "secrets.celeryBrokerURL.name=ospere-db",
+            "--set",
+            "ospere.notification.enabled=true",
+            "--set",
+            "ospere.notification.url=https://bridge.example.com/events",
+            "--set",
+            "ospere.notification.hmac.secretName=ospere-notification-hmac",
+            "--set",
+            "ospere.notification.hmac.clientIdKey=",
+        )
