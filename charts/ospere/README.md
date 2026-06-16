@@ -58,7 +58,9 @@ MeF A2A configuration requires more than the mounted certificate. The chart expo
 the X.509 cert path, private key path, ordered `AppSysID`/ASID list
 (`MEF_CLIENT_SYSTEM_IDS`), deprecated singular `AppSysID`
 (`MEF_CLIENT_SYSTEM_ID`), EFIN, ETIN, tax-year SoftwareId map, default tax
-year, endpoint, environment, and WSDL paths.
+year, endpoint, test mode, and WSDL paths. `ospere.mef.testMode` (default `true`)
+renders `MEF_TEST_MODE`; `true` sends TestCd "T" to the IRS ATS and `false` is
+production. `ospere.mef.endpointURL` blank falls back to the app's ATS default.
 
 `ospere.mef.clientSystemIDs` is rendered as comma-separated
 `MEF_CLIENT_SYSTEM_IDS`. During the compatibility period the chart can also render

@@ -38,7 +38,9 @@ ospere:
       clientIdKey: "client_id"
       clientSecretKey: "client_secret"
   mef:
-    environment: "ats"
+    # test mode (default true) sends TestCd "T" to the IRS ATS; helmfile flips it
+    # to false for production. endpointURL blank falls back to the app's ATS default.
+    testMode: true
     clientSystemIDs: []
     clientSystemID: ""
     efin: ""
