@@ -11,7 +11,7 @@ ospere:
     hmac:
       secretName: "ospere-notification-hmac"
   mef:
-    environment: "ats"
+    testMode: true
     clientSystemIDs:
       - "client-system"
       - "client-system-secondary"

@@ -130,8 +130,8 @@ env:
   {{- end }}
 
   # MeF
-  - name: MEF_ENVIRONMENT
-    value: {{ .Values.ospere.mef.environment | quote }}
+  - name: MEF_TEST_MODE
+    value: {{ .Values.ospere.mef.testMode | quote }}
   {{- if .Values.ospere.mef.clientSystemIDs }}
   - name: MEF_CLIENT_SYSTEM_IDS
     value: {{ join "," .Values.ospere.mef.clientSystemIDs | quote }}
