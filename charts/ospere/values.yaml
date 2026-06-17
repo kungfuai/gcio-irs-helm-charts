@@ -64,6 +64,15 @@ ospere:
 web:
   command: []
   args: []
+  # Gunicorn concurrency, surfaced as env into docker/gunicorn.conf.py so the
+  # image bakes no fixed worker count. Threaded (gthread) rather than sync: the
+  # web surface is IO-bound (DB/S3/MeF waits), so threads keep the health probes
+  # served while slow requests are in flight. Bumped above the image default
+  # (2x4); helmfile overrides per environment.
+  concurrency: 4
+  threads: 8
+  workerClass: "gthread"
+  timeout: 60
 
 worker:
   enabled: true
@@ -161,6 +170,12 @@ ingress:
   annotations: {}
   hosts: []
 
+# Liveness must only catch a truly hung process, never a merely busy one — a
+# restart drops in-flight work and makes load worse. The defaults (timeoutSeconds
+# 1, failureThreshold 3) let a couple of slow requests starve the probe and trip a
+# kill; an unset timeout/threshold inherits those. So liveness is deliberately
+# slack: ~60s of unbroken unresponsiveness before a restart. Reacting to load is
+# readiness's job (pull from the endpoints), not liveness's.
 livenessProbe:
   httpGet:
     path: /livez
@@ -170,6 +185,8 @@ livenessProbe:
       value: liveness
   initialDelaySeconds: 2
   periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
 
 readinessProbe:
   httpGet:
@@ -180,6 +197,8 @@ readinessProbe:
       value: readiness
   initialDelaySeconds: 2
   periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 3
 
 resources: {}
 nodeSelector: {}

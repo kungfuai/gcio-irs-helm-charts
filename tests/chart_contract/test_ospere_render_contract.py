@@ -107,6 +107,12 @@ def test_ospere_value_backed_mef_and_celery_contract() -> None:
         "name": "ospere-notification-hmac",
         "key": "client_secret",
     }
+    # Gunicorn concurrency is env-driven (docker/gunicorn.conf.py reads these), so
+    # the image bakes no fixed worker count and the chart tunes it per environment.
+    assert web_env["WEB_CONCURRENCY"]["value"] == "4"
+    assert web_env["GUNICORN_THREADS"]["value"] == "8"
+    assert web_env["GUNICORN_WORKER_CLASS"]["value"] == "gthread"
+    assert web_env["GUNICORN_TIMEOUT"]["value"] == "60"
 
     worker = first_container(find_doc(docs, kind="Deployment", name="ospere-worker"), "ospere worker")
     worker_env = env_by_name(worker)
@@ -345,3 +351,23 @@ def test_ospere_notification_enabled_requires_non_empty_secret_keys() -> None:
             "--set",
             "ospere.notification.hmac.clientIdKey=",
         )
+
+
+def test_ospere_web_liveness_is_slack_so_a_busy_pod_is_not_restarted() -> None:
+    # Liveness must catch a hung process, never a merely busy one: a restart drops
+    # in-flight work and worsens load. The k8s defaults (timeoutSeconds 1,
+    # failureThreshold 3) let slow requests starve the probe and trip a kill, so
+    # the chart sets an explicit slack budget (~60s) and leaves load-shedding to
+    # readiness. Pin both so a future edit cannot silently reinstate the defaults.
+    docs = render_chart("ospere", "ospere", "-f", "./charts/ospere/ci/all-values.yaml")
+    web = first_container(find_doc(docs, kind="Deployment", name="ospere"), "ospere web")
+
+    liveness = web["livenessProbe"]
+    assert liveness["httpGet"]["path"] == "/livez"
+    assert liveness["timeoutSeconds"] == 5
+    assert liveness["failureThreshold"] == 6
+
+    readiness = web["readinessProbe"]
+    assert readiness["httpGet"]["path"] == "/readyz"
+    assert readiness["timeoutSeconds"] == 3
+    assert readiness["failureThreshold"] == 3
