@@ -56,6 +56,14 @@ spec:
               protocol: TCP
           {{- include "ospere.environment" . | nindent 10 }}
             {{- include "ospere.serviceComponentEnv" (dict "component" "web") | nindent 12 }}
+            - name: WEB_CONCURRENCY
+              value: {{ .Values.web.concurrency | quote }}
+            - name: GUNICORN_THREADS
+              value: {{ .Values.web.threads | quote }}
+            - name: GUNICORN_WORKER_CLASS
+              value: {{ .Values.web.workerClass | quote }}
+            - name: GUNICORN_TIMEOUT
+              value: {{ .Values.web.timeout | quote }}
           {{- with .Values.livenessProbe }}
           livenessProbe:
             {{- toYaml . | nindent 12 }}
