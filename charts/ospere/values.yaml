@@ -167,7 +167,13 @@ service:
 ingress:
   enabled: false
   className: ""
-  annotations: {}
+  annotations:
+    # MeF packets carry large binary attachments (scanned TIFFs, PDFs); nginx's
+    # default client_max_body_size (1m) rejects them with 413 before they reach
+    # Ospere. Ospere takes artifacts as multipart file parts, so this ingress
+    # limit is the governing one. Bounded by app memory (the return view reads
+    # each file into memory), not set unlimited.
+    nginx.ingress.kubernetes.io/proxy-body-size: "500m"
   hosts: []
 
 # Liveness must only catch a truly hung process, never a merely busy one — a
