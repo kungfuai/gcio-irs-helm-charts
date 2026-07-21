@@ -106,6 +106,20 @@ env:
   # OpenTelemetry — configured via Instrumentation CRD (auto-instrumentation)
   # The ADOT operator injects OTEL env vars automatically when the pod annotation
   # instrumentation.opentelemetry.io/inject-python: "true" is present.
+  #
+  # Custom OTel METRICS need explicit wiring: the operator's default
+  # Instrumentation sets OTEL_METRICS_EXPORTER=none, so app counters (LLM
+  # token usage) are dropped at the SDK. Operator env injection is append-only
+  # — per-pod env set here wins. Points at the CloudWatch agent's OTLP/HTTP
+  # receiver (EMF -> CWAgent namespace); requires the agent OTLP receiver
+  # from kfai-infra. Harmless if the receiver is absent: export fails and
+  # metrics drop, the app is unaffected.
+  {{- if .Values.otelMetrics.enabled }}
+  - name: OTEL_METRICS_EXPORTER
+    value: "otlp"
+  - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+    value: {{ .Values.otelMetrics.endpoint | quote }}
+  {{- end }}
 {{- end -}}
 
 {{/*
