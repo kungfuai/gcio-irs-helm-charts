@@ -1,0 +1,79 @@
+{{- if and .Values.bedrockBatch.enabled .Values.bedrockBatch.classify.enabled -}}
+{{/*
+Bedrock batch classification coordinator.
+
+Runs the SAME worker image as a separate long-lived process
+(`python -m worker bedrock-batch-classify`). It claims pending BatchClassify
+records from Postgres, stages JSONL to S3, submits/reconciles Bedrock batch
+jobs, and requeues completed documents. Opt-in and off by default; see the
+`bedrockBatch` block in values.yaml.
+*/}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "worker.fullname" . }}-batch-classify
+  labels:
+    {{- include "worker.labels" . | nindent 4 }}
+    app.kubernetes.io/component: batch-classify
+spec:
+  # Coordinator is a singleton submitter/reconciler; DB leasing makes >1 safe
+  # but unnecessary. Keep at 1 unless throughput demands more.
+  replicas: {{ .Values.bedrockBatch.classify.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "worker.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: batch-classify
+  template:
+    metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-python: "true"
+        {{- with .Values.pod.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "worker.labels" . | nindent 8 }}
+        app.kubernetes.io/component: batch-classify
+        {{- with .Values.pod.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "worker.serviceAccountName" . }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.pod.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}-batch-classify
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          command:
+            {{- toYaml .Values.bedrockBatch.classify.command | nindent 12 }}
+          args:
+            {{- toYaml .Values.bedrockBatch.classify.args | nindent 12 }}
+          {{- include "worker.environment" . | nindent 10 }}
+            {{- include "worker.bedrockBatchEnv" (dict "ctx" . "component" "classify") | nindent 12 }}
+          {{- with .Values.bedrockBatch.classify.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

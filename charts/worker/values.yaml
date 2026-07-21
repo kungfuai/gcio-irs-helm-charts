@@ -31,6 +31,71 @@ worker:
     waitSeconds: 30
     numWorkers: 1
 
+# Bedrock batch inference coordinators (opt-in, OFF by default).
+#
+# When enabled, two additional Deployments run the SAME worker image with a
+# different subcommand: a classification coordinator and a parse coordinator.
+# They only do work when an experimental pipeline config uses the BatchClassify
+# / BatchParse step classes; the regular worker pipeline is unaffected.
+bedrockBatch:
+  enabled: false
+  # Bedrock batch inference service role passed to CreateModelInvocationJob
+  # (terraform output bedrock_batch_inference_role_arn). Required when enabled.
+  roleArn: ""
+  # S3 bucket for batch JSONL artifacts. Optional; defaults to S3_BUCKET.
+  bucket: ""
+  # Bedrock model or inference profile ID. Optional; the coordinators fall
+  # back to the app's classification/parser model config when unset.
+  modelId: ""
+  # Bedrock's minimum records per batch job.
+  minRecords: 100
+  # Default cap on real records claimed per job (latency + shard-size bound).
+  maxRecords: 100
+  # Oldest-record age before the under-minimum policy applies.
+  maxWaitSeconds: 300
+  # Seconds between coordinator submit/reconcile ticks.
+  intervalSeconds: 30
+  # What to do when maxWaitSeconds expires and the backlog is still under
+  # minRecords:
+  #
+  #   wait_then_on_demand   - fall back to the regular on-demand call for the
+  #                           under-minimum tail. This is the economically
+  #                           honest default: batch only when a REAL backlog
+  #                           reaches the Bedrock minimum, pay on-demand for
+  #                           the trickle. No padding waste.
+  #   wait_then_padded_batch- pad the job to minRecords with dummy records to
+  #                           force batch pricing. Padding is NOT free: it only
+  #                           wins when padding tokens < real tokens, the
+  #                           margin is small even with minimal dummies, and it
+  #                           evaporates if the dummy prompt grows. Treat as an
+  #                           experiment-only knob.
+  #   wait_only             - never fall back or pad; small trickles can stall
+  #                           indefinitely.
+  #
+  # NOTE: this deliberately overrides the app CLI default
+  # (wait_then_padded_batch). Revisit only after Cost Explorer confirms the
+  # batch discount + real minimum for this model/partition.
+  underMinimumPolicy: wait_then_on_demand
+  classify:
+    enabled: false
+    replicaCount: 1
+    command: ["python", "-m", "worker"]
+    args: ["bedrock-batch-classify"]
+    # Optional per-coordinator overrides of modelId/maxRecords/intervalSeconds.
+    modelId: ""
+    maxRecords: ""
+    intervalSeconds: ""
+    resources: {}
+  parse:
+    enabled: false
+    replicaCount: 1
+    command: ["python", "-m", "worker"]
+    args: ["bedrock-batch-parse"]
+    modelId: ""
+    maxRecords: ""
+    intervalSeconds: ""
+    resources: {}
+
 # AWS configuration
 aws:
   region: us-east-2
@@ -39,6 +104,7 @@ aws:
   sqs:
     workerQueueURL: ""
     statusQueueURL: ""
+    resumeQueueURL: ""  # Optional - high-priority resume queue (Bedrock batch)
   endpointUrl: ""  # Optional - for LocalStack/testing only
 
 # Service URLs (Kubernetes DNS)
