@@ -11,3 +11,11 @@ worker:
 secrets:
   notifierClientSecret:
     name: "kfai-testing-notifier"
+# Exercise the opt-in Bedrock batch coordinator templates in CI lint.
+bedrockBatch:
+  enabled: true
+  roleArn: "arn:aws:iam::000000000000:role/kfai-testing-bedrock-batch-inference"
+  classify:
+    enabled: true
+  parse:
+    enabled: true
