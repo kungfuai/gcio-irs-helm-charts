@@ -36,6 +36,14 @@ aws:
   s3Bucket: ""  # Required - must be set per environment
   endpointUrl: ""  # Optional - for LocalStack/testing only
 
+# Custom OTel metrics export (LLM token cost counters -> CloudWatch EMF).
+# The CRD-injected auto-instrumentation disables the SDK metrics exporter by
+# default; this re-enables it against the CloudWatch agent's OTLP receiver.
+# Safe to leave on before the receiver exists (export fails silently).
+otelMetrics:
+  enabled: true
+  endpoint: "http://cloudwatch-agent.amazon-cloudwatch:4318/v1/metrics"
+
 # Service account for IRSA (IAM Roles for Service Accounts)
 serviceAccount:
   create: true
