@@ -44,6 +44,10 @@ env:
     value: {{ .Values.services.extractor.url | quote }}
   - name: EXTRACTOR_CONFIG
     value: {{ .Values.worker.extractorConfig | quote }}
+  {{- if .Values.worker.parseRecipe }}
+  - name: PARSE_RECIPE
+    value: {{ .Values.worker.parseRecipe | quote }}
+  {{- end }}
   {{- if .Values.worker.extractorCertPath }}
   - name: EXTRACTOR_CERT_PATH
     value: {{ .Values.worker.extractorCertPath | quote }}

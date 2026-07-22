@@ -13,6 +13,10 @@ replicaCount: 1
 
 worker:
   extractorConfig: /app/config/pipeline.yaml
+  # Parse recipe the Parse step runs: "full_schema" or "compact_schema".
+  # Set per environment from kfai-infra; left empty here so the environment is
+  # the only place it is decided. Empty means the env var is not rendered.
+  parseRecipe: ""
   extractorCertPath: ""  # Optional - TLS cert for extractor service
   logLevel: "INFO"
   notifier:
