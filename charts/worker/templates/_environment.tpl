@@ -119,6 +119,13 @@ env:
     value: "otlp"
   - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
     value: {{ .Values.otelMetrics.endpoint | quote }}
+  # Delta temporality is required for CloudWatch: the agent converts cumulative
+  # streams to deltas and discards each stream's first point as the baseline,
+  # which silently swallows low-rate counters (a counter incremented once per
+  # pod lifetime never lands). Delta sums export each interval's increments
+  # directly; a pod death loses at most the final partial interval.
+  - name: OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE
+    value: "delta"
   {{- end }}
 {{- end -}}
 
