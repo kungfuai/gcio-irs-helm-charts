@@ -76,6 +76,10 @@ env:
     value: {{ $notifier.timeout | default 30 | quote }}
   - name: NOTIFIER_RETRIES
     value: {{ $notifier.retries | default 3 | quote }}
+  {{- if $notifier.wireMonikers }}
+  - name: NOTIFIER_WIRE_MONIKERS
+    value: {{ $notifier.wireMonikers | toJson | quote }}
+  {{- end }}
   {{- if $notifier.clientID }}
   - name: NOTIFIER_CLIENT_ID
     value: {{ $notifier.clientID | quote }}

@@ -28,6 +28,11 @@ worker:
     issueURL: ""
     timeout: 30
     retries: 3
+    # DaaS wire-moniker map: internal schema label -> the exact formMoniker
+    # string Form Bridge's DB expects. Rendered to NOTIFIER_WIRE_MONIKERS as
+    # JSON; empty map omits the env var and the worker emits internal labels
+    # unchanged. Per-environment values own the real map.
+    wireMonikers: {}
   sqs:
     maxRetries: 3
     maxMessages: 1

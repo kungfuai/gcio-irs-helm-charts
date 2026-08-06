@@ -38,11 +38,35 @@ def test_worker_chart_contract() -> None:
     assert env["S3_BUCKET"]["value"] == "kfai-testing-cache"
     assert env["SQS_NUM_WORKERS"]["value"] == "1"
     assert env["NOTIFIER_ENABLED"]["value"] == "true"
+    assert env["NOTIFIER_WIRE_MONIKERS"]["value"] == (
+        '{"falpha_2025_12":"FALPHA_2025_12","fbeta_2025":"FBETA_2025_10"}'
+    )
     assert secret_ref(container, "DATABASE_URL") == {"name": "worker", "key": "database-url"}
     assert secret_ref(container, "NOTIFIER_CLIENT_SECRET") == {
         "name": "kfai-testing-notifier",
         "key": "NOTIFIER_CLIENT_SECRET",
     }
+
+
+def test_worker_wire_monikers_env_absent_when_map_empty() -> None:
+    """An empty wireMonikers map must omit NOTIFIER_WIRE_MONIKERS entirely.
+
+    The worker treats an absent env var as passthrough (emit internal labels).
+    Rendering an empty-string or "{}" value instead would change behavior at
+    the app's validator boundary, so absence is the asserted contract.
+    """
+    docs = render_chart(
+        "worker",
+        "worker",
+        "--set",
+        "aws.s3Bucket=b",
+        "--set",
+        "aws.sqs.workerQueueURL=q",
+        "--set",
+        "aws.sqs.statusQueueURL=s",
+    )
+    env = env_by_name(first_container(find_doc(docs, kind="Deployment", name="worker"), "worker"))
+    assert "NOTIFIER_WIRE_MONIKERS" not in env
 
 
 def test_extractor_chart_contract() -> None:
