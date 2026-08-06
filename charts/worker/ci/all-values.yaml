@@ -8,6 +8,9 @@ worker:
     enabled: true
     clientID: "kfai-testing-client-id"
     transcriptionURL: "https://example.test/integrations/kungfu-ai/task/transcription"
+    wireMonikers:
+      fbeta_2025: "FBETA_2025_10"
+      falpha_2025_12: "FALPHA_2025_12"
 secrets:
   notifierClientSecret:
     name: "kfai-testing-notifier"
