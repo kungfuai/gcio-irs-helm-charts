@@ -5,7 +5,9 @@ metadata:
   labels:
     {{- include "extractor.labels" . | nindent 4 }}
 spec:
+  {{- if not (kindIs "invalid" .Values.replicaCount) }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   strategy:
     type: {{ .Values.updateStrategy.type }}
     {{- if eq .Values.updateStrategy.type "RollingUpdate" }}

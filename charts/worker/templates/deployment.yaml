@@ -5,7 +5,9 @@ metadata:
   labels:
     {{- include "worker.labels" . | nindent 4 }}
 spec:
+  {{- if not (kindIs "invalid" .Values.replicaCount) }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "worker.selectorLabels" . | nindent 6 }}

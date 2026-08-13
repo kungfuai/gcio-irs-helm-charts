@@ -9,6 +9,11 @@
 nameOverride: ""
 fullnameOverride: ""
 
+# Replica count for the Deployment.
+# Set to null to omit .spec.replicas from the rendered Deployment, which
+# leaves replica count unmanaged by helm so kubectl scale or an HPA can own
+# it without conflicting on the next sync. 0 is still rendered (scale to
+# zero); only null omits the field.
 replicaCount: 1
 
 lander:
